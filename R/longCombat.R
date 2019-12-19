@@ -90,16 +90,6 @@ longCombat <- function(idvar, batchvar, features,
   # create a L*V matrix of batch effects
   # incorporate constraint (sum_i ni * hat{gamma}_iv = 0) 
   # to get adjusted batch effect estimates
-  
-  # TEST: USE UNIQUE SUBJECTS PER SCANNER INSTEAD
-  # nsubj <- rep(NA, m)
-  # for(i in 1:m){
-  #   ids <- data[batches[[i]],idvar]
-  #   nsubj[i] <- length(unique(ids))
-  # }
-  # gamma1hat <- -(nsubj[2:m] %*% batch_effects)/L
-  # END TEST
-  
   # calculate the gamma1 hats 
   gamma1hat <- -(ni[2:m] %*% batch_effects)/L
   # add gamma1hat to the rest of the scanner effect table
