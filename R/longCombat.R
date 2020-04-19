@@ -20,7 +20,6 @@ longCombat <- function(idvar, batchvar, features,
                        formula, ranef, niter=30, data, verbose=TRUE){
   ###########################################################
   # idvar:    name of ID variable (character string)
-  # timevar:  name of time variable (character string)
   # batchvar: name of the batch/site/scanner variable (character string)
   # features: vector of names of the feature variables (character string)
   #           or their numeric indices of the corresponding colunms
@@ -76,9 +75,9 @@ longCombat <- function(idvar, batchvar, features,
     # make the linear mixed effects model lmer formula
     lme_formula <- as.formula(paste0(featurenames[v], '~', formula, '+' , batchvar, '+', ranef))
     # fit lme4 model
-    lme_fit <- lme4::lmer(lme_formula, data=data, REML=TRUE, control=lmerControl(optimizer='bobyqa'))
+    lme_fit <- lme4::lmer(lme_formula, data=data, REML=TRUE, control=lme4::lmerControl(optimizer='bobyqa'))
     # save sigma estimates 
-    corr_estimates <- as.data.frame(VarCorr(lme_fit))
+    corr_estimates <- as.data.frame(lme4::VarCorr(lme_fit))
     sigma_estimates[v] <- corr_estimates[corr_estimates$grp=='Residual','sdcor']
     # save batch effects
     batch_effects[,v] <- fixef(lme_fit)[grep(batchvar, names(fixef(lme_fit)))]
