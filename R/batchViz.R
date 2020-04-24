@@ -10,7 +10,8 @@
 # If using this code, make sure you agree and accept this license. 
 ###############################################################
 
-batchViz <- function(batchvar, timevar, xlabel='time', ylabel='batch', title='', data, verbose=TRUE, ...){
+batchViz <- function(batchvar, timevar, xlabel='time', ylabel='batch', 
+                     title='', data, verbose=TRUE, ...){
   ###########################################################
   # DATA SHOULD BE IN "LONG" FORMAT
   # batchvar: name of the batch/site/scanner variable (character string)
@@ -26,7 +27,7 @@ batchViz <- function(batchvar, timevar, xlabel='time', ylabel='batch', title='',
   
   # make batch a factor if not already
   batch <- as.factor(data[,batchvar])
-  if (verbose) cat("[longCombat] found", nlevels(batch), 'batches\n')
+  if (verbose) cat("[batchViz] found", nlevels(batch), 'batches\n')
   # number of batches
   m <- nlevels(batch)
   # row IDs for each batch 

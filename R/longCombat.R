@@ -25,7 +25,7 @@ longCombat <- function(idvar, batchvar, features,
   # idvar:    name of ID variable (character string)
   # batchvar: name of the batch/site/scanner variable (character string)
   # features: vector of names of the feature variables (character string)
-  #           or their numeric indices of the corresponding colunms
+  #           or the numeric indices of the corresponding colunms
   # formula:  character string representing everything on the right side of the formula
   #           for the model, in the notation used by lm or lme4
   #           including covariates, time, and any interactions
@@ -68,8 +68,10 @@ longCombat <- function(idvar, batchvar, features,
   }
   # number of features
   V <- length(featurenames)
+  if (verbose) cat("[longCombat] found", V, 'features\n')
   # total number of observations
   L <- nrow(data)
+  if (verbose) cat("[longCombat] found", L, 'total observations\n')
   
   ##############################
   # standardize data across features
