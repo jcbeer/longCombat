@@ -20,6 +20,8 @@ longCombat <- function(idvar, batchvar, features,
                        formula, ranef, niter=30, data, verbose=TRUE){
   ###########################################################
   # DATA SHOULD BE IN "LONG" FORMAT
+  # PACKAGE DEPENDENCIES: lme4
+  # INPUTS ##################################################
   # idvar:    name of ID variable (character string)
   # batchvar: name of the batch/site/scanner variable (character string)
   # features: vector of names of the feature variables (character string)
@@ -41,6 +43,12 @@ longCombat <- function(idvar, batchvar, features,
   # data:     name of the data.frame that contains the variables above
   #           rows are different subject/timepoints (long format), columns are different variables
   # verbose:  prints messages (logical TRUE/FALSE)
+  # OUTPUTS #################################################
+  # data_combat:    harmonized data
+  # gammahat:       mean of standardized data for each batch (row) and feature (column)
+  # delta2hat:      variance of standardized data for each batch (row) and feature (column)
+  # gammastarhat:   empirical Bayes estimate of additive batch effects
+  # delta2starhat:  empirical Bayes estimate of multiplicative batch effects
   ###########################################################
   
   # make batch a factor if not already
@@ -92,7 +100,7 @@ longCombat <- function(idvar, batchvar, features,
   # to get adjusted batch effect estimates
   # calculate the gamma1 hats 
   gamma1hat <- -(ni[2:m] %*% batch_effects)/L
-  # add gamma1hat to the rest of the scanner effect table
+  # add gamma1hat to the rest of the batch effect table
   batch_effects_adjusted <- sweep(batch_effects, 2, gamma1hat, FUN='+')
   # add gamma1hat as the top row
   batch_effects_adjusted <- rbind(gamma1hat, batch_effects_adjusted)
@@ -195,7 +203,6 @@ longCombat <- function(idvar, batchvar, features,
   ##############################
   return(list(data_combat=data_combat,
               gammahat=gammahat, delta2hat=delta2hat,
-              gammastarhat=gammastarhat_final, delta2starhat=delta2starhat_final,
-              gammabar=gammabar, tau2bar=tau2bar
+              gammastarhat=gammastarhat_final, delta2starhat=delta2starhat_final
               ))
 }
