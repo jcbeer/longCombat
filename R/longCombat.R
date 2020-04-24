@@ -19,6 +19,7 @@
 longCombat <- function(idvar, batchvar, features, 
                        formula, ranef, niter=30, data, verbose=TRUE){
   ###########################################################
+  # DATA SHOULD BE IN "LONG" FORMAT
   # idvar:    name of ID variable (character string)
   # batchvar: name of the batch/site/scanner variable (character string)
   # features: vector of names of the feature variables (character string)
@@ -38,7 +39,7 @@ longCombat <- function(idvar, batchvar, features,
   # niter:    number of iterations for empirical Bayes step
   #           usually converges quickly in less than 30 iterations
   # data:     name of the data.frame that contains the variables above
-  #           rows are different subject/timepoints, columns are different variables
+  #           rows are different subject/timepoints (long format), columns are different variables
   # verbose:  prints messages (logical TRUE/FALSE)
   ###########################################################
   
