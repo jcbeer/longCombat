@@ -1,4 +1,5 @@
 ###############################################################
+# multTest function will test (Fligner-Killeen method) 
 # for multiplicative batch effects in the residuals for each feature 
 # after fitting linear mixed effects model
 # Author: Joanne C. Beer, joannecbeer@gmail.com
