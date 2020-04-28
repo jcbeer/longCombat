@@ -91,7 +91,7 @@ longCombat <- function(idvar, batchvar, features,
     corr_estimates <- as.data.frame(lme4::VarCorr(lme_fit))
     sigma_estimates[v] <- corr_estimates[corr_estimates$grp=='Residual','sdcor']
     # save batch effects
-    batch_effects[,v] <- fixef(lme_fit)[grep(batchvar, names(fixef(lme_fit)))]
+    batch_effects[,v] <- lme4::fixef(lme_fit)[grep(batchvar, names(lme4::fixef(lme_fit)))]
     # save predicted values
     predicted[,v] <- fitted(lme_fit)
   } # end loop over features
