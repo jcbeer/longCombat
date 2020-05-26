@@ -17,7 +17,7 @@
 ###############################################################
 
 longCombat <- function(idvar, batchvar, features, 
-                       formula, ranef, niter=30, data, verbose=TRUE){
+                       formula, ranef, niter=30, method='REML', data, verbose=TRUE){
   ###########################################################
   # DATA SHOULD BE IN "LONG" FORMAT
   # PACKAGE DEPENDENCIES: lme4
@@ -42,6 +42,9 @@ longCombat <- function(idvar, batchvar, features,
   #           usually converges quickly in less than 30 iterations
   # data:     name of the data.frame that contains the variables above
   #           rows are different subject/timepoints (long format), columns are different variables
+  # method:   (character string)
+  #           'REML' (default, more conservative Type I error control)
+  #           'MSR' (more powerful)
   # verbose:  prints messages (logical TRUE/FALSE)
   # OUTPUTS #################################################
   # data_combat:    harmonized data
@@ -89,7 +92,12 @@ longCombat <- function(idvar, batchvar, features,
     lme_fit <- lme4::lmer(lme_formula, data=data, REML=TRUE, control=lme4::lmerControl(optimizer='bobyqa'))
     # save sigma estimates 
     corr_estimates <- as.data.frame(lme4::VarCorr(lme_fit))
-    sigma_estimates[v] <- corr_estimates[corr_estimates$grp=='Residual','sdcor']
+    if (method == 'REML'){
+      sigma_estimates[v] <- corr_estimates[corr_estimates$grp=='Residual','sdcor']
+    } else if (method == 'MSR'){
+      resid <- residuals(lme_fit)
+      sigma_estimates[v] <- sqrt((sum((resid-mean(resid))^2)/length(resid)))
+    }
     # save batch effects
     batch_effects[,v] <- lme4::fixef(lme_fit)[grep(batchvar, names(lme4::fixef(lme_fit)))]
     # save predicted values
