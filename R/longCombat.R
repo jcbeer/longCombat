@@ -42,9 +42,9 @@ longCombat <- function(idvar, batchvar, features,
   #           usually converges quickly in less than 30 iterations
   # data:     name of the data.frame that contains the variables above
   #           rows are different subject/timepoints (long format), columns are different variables
-  # method:   (character string)
-  #           'REML' (default, more conservative Type I error control)
-  #           'MSR' (more powerful)
+  # method:   method for estimating sigma in standardization step (character string)
+  #           'REML' (default, more conservative type I error control)
+  #           'MSR' (more powerful, may not control type I error at nominal level)
   # verbose:  prints messages (logical TRUE/FALSE)
   # OUTPUTS #################################################
   # data_combat:    harmonized data
