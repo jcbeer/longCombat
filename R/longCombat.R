@@ -90,9 +90,9 @@ longCombat <- function(idvar, batchvar, features,
     lme_formula <- as.formula(paste0(featurenames[v], '~', formula, '+' , batchvar, '+', ranef))
     # fit lme4 model
     lme_fit <- lme4::lmer(lme_formula, data=data, REML=TRUE, control=lme4::lmerControl(optimizer='bobyqa'))
-    # save sigma estimates 
-    corr_estimates <- as.data.frame(lme4::VarCorr(lme_fit))
+    # save sigma estimate
     if (method == 'REML'){
+      corr_estimates <- as.data.frame(lme4::VarCorr(lme_fit))
       sigma_estimates[v] <- corr_estimates[corr_estimates$grp=='Residual','sdcor']
     } else if (method == 'MSR'){
       resid <- residuals(lme_fit)
