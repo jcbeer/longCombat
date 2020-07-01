@@ -16,13 +16,15 @@
 # If using this code, make sure you agree and accept this license. 
 ###############################################################
 
-longCombat <- function(idvar, batchvar, features, 
+longCombat <- function(idvar, timevar, batchvar, features, 
                        formula, ranef, niter=30, method='REML', data, verbose=TRUE){
   ###########################################################
   # DATA SHOULD BE IN "LONG" FORMAT
   # PACKAGE DEPENDENCIES: lme4
   # INPUTS ##################################################
   # idvar:    name of ID variable (character string)
+  # timevar:  name of variable that distinguishes within-subject repeated measures
+  #           e.g. time, age, or visit (character string)
   # batchvar: name of the batch/site/scanner variable (character string)
   # features: vector of names of the feature variables (character string)
   #           or the numeric indices of the corresponding colunms
@@ -201,8 +203,12 @@ longCombat <- function(idvar, batchvar, features,
   data_combat <- (sigmas/sqrt(delta2starhat_expanded))*(data_std - gammastarhat_expanded) + predicted - batch_effects_expanded
   
   ##############################
-  # add names
+  # label the data
   ##############################
+  # add IDs and time variable to data_combat
+  data_combat <- cbind(data[,c(idvar, timevar)], data_combat)
+  # add names
+  colnames(data_combat) <- c(idvar, timevar, paste0(featurenames, '.combat'))
   colnames(gammahat) <- featurenames
   colnames(delta2hat) <- featurenames
   colnames(gammastarhat_final) <- featurenames
