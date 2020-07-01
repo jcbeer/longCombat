@@ -59,7 +59,9 @@ longCombat <- function(idvar, timevar, batchvar, features,
   
   # check for missing data 
   if (sum(is.na(data)) > 0) {
-    stop('Missing data in the data frame. Before running longCombat either impute the missing values, remove those rows, or remove columns with missing values if that variable is not in the model.')
+    missing <- paste(names(data)[apply(data, 2, function(x) sum(is.na(x)) > 0)], collapse=', ')
+    message <- paste0('Missing data in variables\n\n', missing, '\n\nBefore running longCombat either impute the missing values, remove those rows, or remove columns with missing values if that variable is not in the model.')
+    stop(message)
   }
   # make batch a factor if not already
   batch <- as.factor(data[,batchvar])
