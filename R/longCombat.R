@@ -54,6 +54,10 @@ longCombat <- function(idvar, batchvar, features,
   # delta2starhat:  empirical Bayes estimate of multiplicative batch effects
   ###########################################################
   
+  # check for missing data 
+  if (sum(is.na(data)) > 0) {
+    stop('Missing data in the data frame. Either impute the missing values, remove those row(s), or remove column(s) with missing values if that variable is not in the model.')
+  }
   # make batch a factor if not already
   batch <- as.factor(data[,batchvar])
   if (verbose) cat("[longCombat] found", nlevels(batch), 'batches\n')
