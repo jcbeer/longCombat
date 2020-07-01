@@ -4,7 +4,7 @@
 # Author: Joanne C. Beer, joannecbeer@gmail.com
 ###############################################################
 # as described in the manuscript at 
-# https://www.biorxiv.org/content/10.1101/868810v1
+# https://www.biorxiv.org/content/10.1101/868810v4
 ###############################################################
 # This is a modification of the ComBat function code 
 # from the sva package that can be found at
@@ -17,7 +17,7 @@
 ###############################################################
 
 longCombat <- function(idvar, timevar, batchvar, features, 
-                       formula, ranef, niter=30, method='REML', data, verbose=TRUE){
+                       formula, ranef, data, niter=30, method='REML', verbose=TRUE){
   ###########################################################
   # DATA SHOULD BE IN "LONG" FORMAT
   # PACKAGE DEPENDENCIES: lme4
@@ -39,11 +39,12 @@ longCombat <- function(idvar, timevar, batchvar, features,
   # ranef:    character string representing formula for the random effects
   #           in the notation used by lme4
   #           e.g. "(1|subid)" fits a random intercept for each unique idvar "subid"
-  #           e.g. "(1 + time|subid)" fits a random intercept and slope unique "subid"
+  #           e.g. "(1 + time|subid)" fits a random intercept and slope for unique "subid"
+  # data:     name of the data.frame that contains the variables above
+  #           rows are different subject/timepoints (long format)
+  #           columns are different variables
   # niter:    number of iterations for empirical Bayes step
   #           usually converges quickly in less than 30 iterations
-  # data:     name of the data.frame that contains the variables above
-  #           rows are different subject/timepoints (long format), columns are different variables
   # method:   method for estimating sigma in standardization step (character string)
   #           'REML' (default, more conservative type I error control)
   #           'MSR' (more powerful, may not control type I error at nominal level)
