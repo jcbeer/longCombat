@@ -5,7 +5,7 @@
 # Author: Joanne C. Beer, joannecbeer@gmail.com
 ###############################################################
 # as described in the manuscript at 
-# https://www.biorxiv.org/content/10.1101/868810v1
+# https://www.biorxiv.org/content/10.1101/868810v4
 ###############################################################
 # The original and present code is under the Artistic License 2.0.
 # If using this code, make sure you agree and accept this license. 

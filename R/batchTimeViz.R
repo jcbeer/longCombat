@@ -1,5 +1,5 @@
 ###############################################################
-# batchViz is a simple function that will visualize batches 
+# batchTimeViz is a simple function that will visualize batches 
 # over time for multi-batch longitudinal data
 # Author: Joanne C. Beer, joannecbeer@gmail.com
 ###############################################################
@@ -10,7 +10,7 @@
 # If using this code, make sure you agree and accept this license. 
 ###############################################################
 
-batchViz <- function(batchvar, timevar, xlabel='time', ylabel='batch', 
+batchTimeViz <- function(batchvar, timevar, xlabel='time', ylabel='batch', 
                      title='', data, verbose=TRUE, ...){
   ###########################################################
   # DATA SHOULD BE IN "LONG" FORMAT
