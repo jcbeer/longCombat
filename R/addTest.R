@@ -1,45 +1,17 @@
-###############################################################
-# addTest function will test (Kenward-Roger method) 
-# for additive batch effects in the residuals for each feature 
-# after fitting linear mixed effects model
-# Author: Joanne C. Beer, joannecbeer@gmail.com
-###############################################################
-# as described in the manuscript at 
-# https://www.biorxiv.org/content/10.1101/868810v4
-###############################################################
-# The original and present code is under the Artistic License 2.0.
-# If using this code, make sure you agree and accept this license. 
-###############################################################
+#' Test for Additive Batch Effects
+#' 
+#' \code{addTest} function will test (Kenward-Roger method) for additive batch effects in the residuals for each feature after fitting a linear mixed effects model. Data should be in "long" format. Depends on \code{lme4} and \code{pbkrtest} packages.
+#' @param idvar name of ID variable (character string).
+#' @param batchvar name of the batch/site/scanner variable (character string).
+#' @param features vector of names of the feature variables (character string) or the numeric indices of the corresponding columns.
+#' @param formula character string representing everything on the right side of the formula for the model, in the notation used by \code{lme4} including covariates, time, and any interactions, e.g., \code{"age + sex + diagnosis*time"} fits model with main effects age, sex, diagnosis, and time and the diagnosis*time interaction. Formula should NOT include batchvar and should NOT include random effects.
+#' @param ranef character string representing formula for the random effects in the notation used by \code{lme4}, e.g., \code{"(1|subid)"} fits a random intercept for each unique idvar \code{subid}, and \code{"(1 + time|subid)"} fits a random intercept and slope for unique \code{subid}.
+#' @param data name of the data frame that contains the variables above. Rows are different subject/timepoints (long format), columns are different variables.
+#' @param verbose prints messages (logical \code{TRUE} or \code{FALSE}).
+#' @return A data frame of Kenward-Roger test results for each feature.
 
 addTest <- function(idvar, batchvar, features, 
                        formula, ranef, data, verbose=TRUE){
-  ###########################################################
-  # DATA SHOULD BE IN "LONG" FORMAT
-  # PACKAGE DEPENDENCIES: lme4, pbkrtest
-  # INPUTS ##################################################
-  # idvar:    name of ID variable (character string)
-  # batchvar: name of the batch/site/scanner variable (character string)
-  # features: vector of names of the feature variables (character string)
-  #           or the numeric indices of the corresponding colunms
-  # formula:  character string representing everything on the right side of the formula
-  #           for the model, in the notation used by lm or lme4
-  #           including covariates, time, and any interactions
-  #           e.g. "age + sex + diagnosis*time"
-  #           fits model with main effects age, sex, diagnosis, and time
-  #           and the diagnosis*time interaction
-  #           should NOT include batchvar
-  #           should NOT include random effects 
-  # ranef:    character string representing formula for the random effects
-  #           in the notation used by lme4
-  #           e.g. "(1|subid)" fits a random intercept for each unique idvar "subid"
-  #           e.g. "(1 + time|subid)" fits a random intercept and slope unique "subid"
-  # data:     name of the data.frame that contains the variables above
-  #           rows are different subject/timepoints (long format), columns are different variables
-  # verbose:  prints messages (logical TRUE/FALSE)
-  # OUTPUTS #################################################
-  # addEffect_ordered: table of Kenward-Roger test results for each feature
-  ###########################################################
-  
   # make batch a factor if not already
   batch <- as.factor(data[,batchvar])
   if (verbose) cat("[addTest] found", nlevels(batch), 'batches\n')

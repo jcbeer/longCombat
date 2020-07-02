@@ -1,62 +1,28 @@
-###############################################################
-# longCombat function will implement Longitudinal ComBat
-# harmonization for multi-batch longitudinal data
-# Author: Joanne C. Beer, joannecbeer@gmail.com
-###############################################################
-# as described in the manuscript at 
-# https://www.biorxiv.org/content/10.1101/868810v4
-###############################################################
-# This is a modification of the ComBat function code 
-# from the sva package that can be found at
-# https://bioconductor.org/packages/release/bioc/html/sva.html 
-# and the combat.R that can be found at 
-# https://github.com/Jfortin1/ComBatHarmonization
-###############################################################
-# The original and present code is under the Artistic License 2.0.
-# If using this code, make sure you agree and accept this license. 
-###############################################################
+#' Harmonize Multi-batch Longitudinal Data
+#' 
+#' \code{longCombat} function will implement Longitudinal ComBat harmonization for multi-batch longitudinal data. Detailed methods are described in the manuscript at \url{https://www.biorxiv.org/content/10.1101/868810v4}. This is a modification of the ComBat function code from the \code{sva} package that can be found at \url{https://bioconductor.org/packages/release/bioc/html/sva.html} and \code{combat.R} that can be found at \url{https://github.com/Jfortin1/ComBatHarmonization}. Data should be in "long" format. Depends on \code{lme4} package.
+#' @param idvar name of ID variable (character string).
+#' @param timevar name of variable that distinguishes within-subject repeated measures, e.g., time, age, or visit (character string).
+#' @param batchvar name of the batch/site/scanner variable (character string).
+#' @param features vector of names of the feature variables (character string) or the numeric indices of the corresponding columns.
+#' @param formula character string representing everything on the right side of the formula for the model, in the notation used by \code{lme4} including covariates, time, and any interactions, e.g., \code{"age + sex + diagnosis*time"} fits model with main effects age, sex, diagnosis, and time and the diagnosis*time interaction. Formula should NOT include batchvar and should NOT include random effects.
+#' @param ranef character string representing formula for the random effects in the notation used by \code{lme4}, e.g., \code{"(1|subid)"} fits a random intercept for each unique idvar \code{subid}, and \code{"(1 + time|subid)"} fits a random intercept and slope for unique \code{subid}.
+#' @param data name of the data.frame that contains the variables above. Rows are different subject/timepoints (long format); columns are different variables.
+#' @param niter number of iterations for empirical Bayes step. Usually converges quickly in less than 30 iterations.
+#' @param method method for estimating sigma in standardization step (character string). \code{'REML'} (default, more conservative type I error control) or \code{'MSR'} (more powerful, may not control type I error at nominal level).
+#' @param verbose prints messages (logical \code{TRUE} or \code{FALSE}).
+#' @return Function outputs a list including the following:
+#' \describe{
+#'     \item{\code{data_combat}}{data frame with columns idvar, timevar, and ComBat harmonized data}
+#'     \item{\code{gammahat}}{data frame containing mean of standardized data for each batch (row) and feature (column)}
+#'     \item{\code{delta2hat}}{data frame containing variance of standardized data for each batch (row) and feature (column)}
+#'     \item{\code{gammastarhat}}{data frame containing empirical Bayes estimate of additive batch effects}
+#'     \item{\code{delta2starhat}}{data frame containing empirical Bayes estimate of multiplicative batch effects}
+#'     }
 
 longCombat <- function(idvar, timevar, batchvar, features, 
                        formula, ranef, data, niter=30, method='REML', verbose=TRUE){
-  ###########################################################
-  # DATA SHOULD BE IN "LONG" FORMAT
-  # PACKAGE DEPENDENCIES: lme4
-  # INPUTS ##################################################
-  # idvar:    name of ID variable (character string)
-  # timevar:  name of variable that distinguishes within-subject repeated measures
-  #           e.g. time, age, or visit (character string)
-  # batchvar: name of the batch/site/scanner variable (character string)
-  # features: vector of names of the feature variables (character string)
-  #           or the numeric indices of the corresponding columns
-  # formula:  character string representing everything on the right side of the formula
-  #           for the model, in the notation used by lm or lme4
-  #           including covariates, time, and any interactions
-  #           e.g. "age + sex + diagnosis*time"
-  #           fits model with main effects age, sex, diagnosis, and time
-  #           and the diagnosis*time interaction
-  #           should NOT include batchvar
-  #           should NOT include random effects 
-  # ranef:    character string representing formula for the random effects
-  #           in the notation used by lme4
-  #           e.g. "(1|subid)" fits a random intercept for each unique idvar "subid"
-  #           e.g. "(1 + time|subid)" fits a random intercept and slope for unique "subid"
-  # data:     name of the data.frame that contains the variables above
-  #           rows are different subject/timepoints (long format)
-  #           columns are different variables
-  # niter:    number of iterations for empirical Bayes step
-  #           usually converges quickly in less than 30 iterations
-  # method:   method for estimating sigma in standardization step (character string)
-  #           'REML' (default, more conservative type I error control)
-  #           'MSR' (more powerful, may not control type I error at nominal level)
-  # verbose:  prints messages (logical TRUE/FALSE)
-  # OUTPUTS #################################################
-  # data_combat:    harmonized data
-  # gammahat:       mean of standardized data for each batch (row) and feature (column)
-  # delta2hat:      variance of standardized data for each batch (row) and feature (column)
-  # gammastarhat:   empirical Bayes estimate of additive batch effects
-  # delta2starhat:  empirical Bayes estimate of multiplicative batch effects
-  ###########################################################
-  
+
   # check for missing data 
   if (sum(is.na(data)) > 0) {
     missing <- paste(names(data)[apply(data, 2, function(x) sum(is.na(x)) > 0)], collapse=', ')

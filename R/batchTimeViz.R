@@ -1,29 +1,18 @@
-###############################################################
-# batchTimeViz is a simple function that will visualize batches 
-# over time for multi-batch longitudinal data
-# Author: Joanne C. Beer, joannecbeer@gmail.com
-###############################################################
-# as described in the manuscript at 
-# https://www.biorxiv.org/content/10.1101/868810v4
-###############################################################
-# The present code is under the Artistic License 2.0.
-# If using this code, make sure you agree and accept this license. 
-###############################################################
+#' Visualize Batches Over Time
+#' 
+#' \code{batchTimeViz} is a simple function that will visualize batches over time for multi-batch longitudinal data. Data should be in "long" format.
+#' @param batchvar name of the batch/site/scanner variable (character string).
+#' @param timevar name of the time variable, e.g. age or time from baseline (character string).
+#' @param xlabel x-axis label, default is \code{'time'} (character string).
+#' @param ylabel y-axis label, default is \code{'batch'} (character string).
+#' @param title main title for the plot, default is no title (character string).
+#' @param data name of the data frame that contains the variables above rows are different subject/timepoints (long format), columns are different variables.
+#' @param verbose prints messages (logical \code{TRUE} or \code{FALSE}).
+#' @param ... other graphical parameter arguments passed to \code{par()}.
+#' @return Creates a plot.
 
 batchTimeViz <- function(batchvar, timevar, xlabel='time', ylabel='batch', 
                      title='', data, verbose=TRUE, ...){
-  ###########################################################
-  # DATA SHOULD BE IN "LONG" FORMAT
-  # batchvar: name of the batch/site/scanner variable (character string)
-  # timevar:  name of the time variable, e.g. age or time from baseline (character string)
-  # xlabel:   x-axis label, default is 'time' (character string)
-  # ylabel:   y-axis label, default is 'batch' (character string)
-  # title:    main title for the plot, default is no title (character string)
-  # data:     name of the data.frame that contains the variables above
-  #           rows are different subject/timepoints (long format), columns are different variables
-  # verbose:  prints messages (logical TRUE/FALSE)
-  # ...:      other graphical parameter arguments passed to par()
-  ###########################################################
   
   # make batch a factor if not already
   batch <- as.factor(data[,batchvar])

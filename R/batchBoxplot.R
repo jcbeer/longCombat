@@ -1,15 +1,22 @@
-###############################################################
-# batchBoxplot will plot residuals of linear mixed effect model
-# for a simgle feature by batch 
-# to visualize additive and multiplicative batch effects
-# Author: Joanne C. Beer, joannecbeer@gmail.com
-###############################################################
-# as described in the manuscript at 
-# https://www.biorxiv.org/content/10.1101/868810v4
-###############################################################
-# The present code is under the Artistic License 2.0.
-# If using this code, make sure you agree and accept this license. 
-###############################################################
+#' Boxplot for Batch Effects
+#' 
+#' \code{batchBoxplot} function will plot residuals of linear mixed effect model for a simgle feature by batch to visualize additive and multiplicative batch effects. Data should be in "long" format. Depends on \code{lme4} packages.
+#' @param idvar name of ID variable (character string).
+#' @param batchvar name of the batch/site/scanner variable (character string).
+#' @param feature name of the feature variable (character string) or the numeric index of the corresponding column.
+#' @param formula character string representing everything on the right side of the formula for the model, in the notation used by \code{lme4} including covariates, time, and any interaction, e.g., \code{"age + sex + diagnosis*time"} fits model with main effects age, sex, diagnosis, and time and the diagnosis*time interaction. Formula should NOT include batchvar and should NOT include random effects.
+#' @param ranef character string representing formula for the random effects in the notation used by \code{lme4}, e.g., \code{"(1|subid)"} fits a random intercept for each unique idvar \code{subid}, and \code{"(1 + time|subid)"} fits a random intercept and slope for unique \code{subid}.
+#' @param data name of the data frame that contains the variables above. Rows are different subject/timepoints (long format), columns are different variables.
+#' @param adjustBatch should residuals be adjusted for batch? (logical \code{TRUE} or \code{FALSE}). Use \code{FALSE} to illustrate additive (and multiplicative) batch effects. Use \code{TRUE} to illustrate only multiplicative batch effects.
+#' @param orderby \code{'mean'} orders boxplots by increasing mean; best for illustrating additive batch effects (use with \code{adjustBatch=FALSE}). \code{'var'} orders boxplots by increasing variance; best for illustrating multiplicative batch effects.
+#' @param plotMeans Should batch means be plotted on top of the boxplots? (logical \code{TRUE} or \code{FALSE}).
+#' @param colors Vector of colors the same length and order as \code{levels(as.factor(data[,batchvar]))} that determines the colors of the boxplots (character string of color names or hexadecimal codes).
+#' @param xlabel x-axis label, default is \code{'batch'} (character string).
+#' @param ylabel y-axis label, default is \code{'residuals'} (character string).
+#' @param title main title for the plot, default is no title (character string).
+#' @param verbose prints messages (logical \code{TRUE} or \code{FALSE}).
+#' @param ... other graphical parameter arguments passed to \code{par()}.
+#' @return Creates a boxplot.
 
 batchBoxplot <- function(idvar, batchvar, feature, 
                          formula, ranef, data,
@@ -17,44 +24,6 @@ batchBoxplot <- function(idvar, batchvar, feature,
                          plotMeans=TRUE, colors='grey',
                          xlabel='batch', ylabel='residuals',
                          title='', verbose=TRUE, ...){
-  ###########################################################
-  # DATA SHOULD BE IN "LONG" FORMAT
-  # idvar:    name of ID variable (character string)
-  # batchvar: name of the batch/site/scanner variable (character string)
-  # feature:  name of the feature variable to plot (character string)
-  #           or the numeric index of the corresponding column
-  # formula:  character string representing everything on the right side of the formula
-  #           for the model, in the notation used by lm or lme4
-  #           including covariates, time, and any interactions
-  #           e.g. "age + sex + diagnosis*time"
-  #           fits model with main effects age, sex, diagnosis, and time
-  #           and the diagnosis*time interaction
-  #           should NOT include batchvar
-  #           should NOT include random effects 
-  # ranef:    character string representing formula for the random effects
-  #           in the notation used by lme4
-  #           e.g. "(1|subid)" fits a random intercept for each unique idvar "subid"
-  #           e.g. "(1 + time|subid)" fits a random intercept and slope for unique "subid"
-  # data:     name of the data.frame that contains the variables above
-  #           rows are different subject/timepoints (long format)
-  #           columns are different variables
-  # adjustBatch: should residuals be adjusted for batch? (logical TRUE/FALSE)
-  #           use FALSE to illustrate additive (and multiplicative) batch effects
-  #           use TRUE to illustrate only multiplicative batch effects
-  # orderby:  'mean' orders boxplots by increasing mean
-  #           best for illustrating additive batch effects (use with adjustBatch=FALSE)
-  #           'var' orders boxplots by increasing variance
-  #           best for illustrating multiplicative batch effects
-  # plotMeans: should batch means be plotted on top of the boxplots (logical TRUE/FALSE)
-  # colors:   vector of colors the same length and order as levels(as.factor(data$batchvar))
-  #           that determines the colors of the boxplots 
-  #           (character string of color names or hexadecimal codes)
-  # xlabel:   x-axis label, default is 'time' (character string)
-  # ylabel:   y-axis label, default is 'batch' (character string)
-  # title:    main title for the plot, default is no title (character string)
-  # verbose:  prints messages (logical TRUE/FALSE)
-  # ...:      other graphical parameter arguments passed to par()
-  ###########################################################
   
   # make batch a factor if not already
   data[,batchvar] <- droplevels(as.factor(data[,batchvar]))
