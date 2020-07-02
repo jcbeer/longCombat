@@ -1,9 +1,5 @@
----
-title: "Longitudinal ComBat R Package"
-author: "Joanne C. Beer"
-date: "July 2, 2020"
-output: html_document
----
+# "Longitudinal ComBat R Package"
+## "Joanne C. Beer"
 
 Install package with 
 ```{r, include=FALSE}
