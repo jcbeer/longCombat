@@ -1,6 +1,6 @@
 # longCombat: Longitudinal ComBat R Package
 
-Longitudinal ComBat methods are described in the manscript \url{https://www.biorxiv.org/content/10.1101/868810v4}.
+Longitudinal ComBat methods are described in the manuscript at https://www.biorxiv.org/content/10.1101/868810v4.
 
 Install package with: 
 ```{r, include=FALSE}
