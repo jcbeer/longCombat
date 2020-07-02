@@ -27,7 +27,7 @@ longCombat <- function(idvar, timevar, batchvar, features,
   #           e.g. time, age, or visit (character string)
   # batchvar: name of the batch/site/scanner variable (character string)
   # features: vector of names of the feature variables (character string)
-  #           or the numeric indices of the corresponding colunms
+  #           or the numeric indices of the corresponding columns
   # formula:  character string representing everything on the right side of the formula
   #           for the model, in the notation used by lm or lme4
   #           including covariates, time, and any interactions
