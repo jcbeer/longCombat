@@ -1,14 +1,11 @@
 Package: longCombat
 Title: Longitudinal ComBat for Harmonizing Multi-batch Longitudinal Data
 Version: 0.0.0.90000
-Authors@R: 
-    person(given = “Joanne”,
-           family = “Beer”,
-           role = c("aut", "cre"),
-           email = “joannecbeer@gmail.com",
-           comment = c(ORCID = “0000-0001-8583-8467”))
-Description: longCombat implements ComBat (“combating 
-    batch effects when combining batches”) harmonization 
+Authors@R: person("Joanne", "Beer",
+           email = "joannecbeer@gmail.com",
+           role = c("aut", "cre"))
+Description: longCombat implements ComBat ("combating 
+    batch effects when combining batches") harmonization 
     in the linear mixed model framework using the lme4 package.
     It has functions to visualize batches over time, visualize
     and test for additive (using pbkrtest package) and multiplicative 
