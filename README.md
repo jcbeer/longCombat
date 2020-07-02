@@ -1,9 +1,7 @@
-# "Longitudinal ComBat R Package"
-## "Joanne C. Beer"
+# Longitudinal ComBat R Package
 
-Install package with 
+Install package with: 
 ```{r, include=FALSE}
-install.packages("devtools")
 devtools::install_github("jcbeer/longCombat")
 ```
 
