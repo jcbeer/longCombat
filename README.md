@@ -1,4 +1,4 @@
-# Longitudinal ComBat R Package
+# longCombat: Longitudinal ComBat R Package
 
 Install package with: 
 ```{r, include=FALSE}
