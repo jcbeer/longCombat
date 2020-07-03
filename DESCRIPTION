@@ -1,6 +1,7 @@
 Package: longCombat
-Title: Longitudinal ComBat for Harmonizing Multi-batch Longitudinal Data
 Version: 0.0.0.90000
+Date: 2020-07-02
+Title: Longitudinal ComBat for Harmonizing Multi-batch Longitudinal Data
 Authors@R: person("Joanne", "Beer",
            email = "joannecbeer@gmail.com",
            role = c("aut", "cre"))
