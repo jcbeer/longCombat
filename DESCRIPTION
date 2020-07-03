@@ -14,7 +14,7 @@ Depends: R (>= 3.5.3)
 Imports:
     lme4,
     pbkrtest
-License: Artistic License 2.0
+License: MIT
 Encoding: UTF-8
 LazyData: true
 Roxygen: list(markdown = TRUE)
