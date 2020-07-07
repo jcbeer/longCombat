@@ -4,7 +4,7 @@ Longitudinal ComBat uses an empirical Bayes method to harmonize means and varian
 
 Install package with: 
 ```{r, include=FALSE}
-install.packages('devtools')
-devtools::install_github('jcbeer/longCombat')
+install.packages("devtools")
+devtools::install_github("jcbeer/longCombat")
 ```
 
