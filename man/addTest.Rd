@@ -19,11 +19,11 @@ addTest(idvar, batchvar, features, formula, ranef, data, verbose = TRUE)
 
 \item{data}{name of the data frame that contains the variables above. Rows are different subject/timepoints (long format), columns are different variables.}
 
-\item{verbose}{prints messages (logical \code{TRUE} or \code{FALSE}).}
+\item{verbose}{prints messages (logical \code{TRUE} or \code{FALSE}). Default is \code{TRUE}.}
 }
 \value{
 A data frame of Kenward-Roger test results for each feature.
 }
 \description{
-\code{addTest} function will test (Kenward-Roger method) for additive batch effects in the residuals for each feature after fitting a linear mixed effects model. Data should be in "long" format. Depends on \code{lme4} and \code{pbkrtest} packages.
+\code{addTest} function will test for additive batch effects in the residuals for each feature after fitting a linear mixed effects model. Uses Kenward-Roger method. Data should be in "long" format. Depends on \code{lme4} and \code{pbkrtest} packages.
 }

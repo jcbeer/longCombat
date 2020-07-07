@@ -7,7 +7,7 @@
 #' @param ylabel y-axis label, default is \code{'batch'} (character string).
 #' @param title main title for the plot, default is no title (character string).
 #' @param data name of the data frame that contains the variables above rows are different subject/timepoints (long format), columns are different variables.
-#' @param verbose prints messages (logical \code{TRUE} or \code{FALSE}).
+#' @param verbose prints messages (logical \code{TRUE} or \code{FALSE}). Default is \code{TRUE}.
 #' @param ... other graphical parameter arguments passed to \code{par()}.
 #' @return Creates a plot.
 

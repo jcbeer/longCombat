@@ -30,13 +30,13 @@ longCombat(
 
 \item{ranef}{character string representing formula for the random effects in the notation used by \code{lme4}, e.g., \code{"(1|subid)"} fits a random intercept for each unique idvar \code{subid}, and \code{"(1 + time|subid)"} fits a random intercept and slope for unique \code{subid}.}
 
-\item{data}{name of the data.frame that contains the variables above. Rows are different subject/timepoints (long format); columns are different variables.}
+\item{data}{name of the data frame that contains the variables above. Rows are different subject/timepoints (long format); columns are different variables.}
 
-\item{niter}{number of iterations for empirical Bayes step. Usually converges quickly in less than 30 iterations.}
+\item{niter}{number of iterations for empirical Bayes step. Usually converges quickly in less than 30 iterations. Default is 30.}
 
 \item{method}{method for estimating sigma in standardization step (character string). \code{'REML'} (default, more conservative type I error control) or \code{'MSR'} (more powerful, may not control type I error at nominal level).}
 
-\item{verbose}{prints messages (logical \code{TRUE} or \code{FALSE}).}
+\item{verbose}{prints messages (logical \code{TRUE} or \code{FALSE}). Default is \code{TRUE}.}
 }
 \value{
 Function outputs a list including the following:
@@ -49,5 +49,5 @@ Function outputs a list including the following:
 }
 }
 \description{
-\code{longCombat} function will implement Longitudinal ComBat harmonization for multi-batch longitudinal data. Detailed methods are described in the manuscript at \url{https://www.biorxiv.org/content/10.1101/868810v4}. This is a modification of the ComBat function code from the \code{sva} package that can be found at \url{https://bioconductor.org/packages/release/bioc/html/sva.html} and \code{combat.R} that can be found at \url{https://github.com/Jfortin1/ComBatHarmonization}. Data should be in "long" format. Depends on \code{lme4} package.
+\code{longCombat} function will implement longitudinal ComBat harmonization for multi-batch longitudinal data. Longitudinal ComBat uses an empirical Bayes method to harmonize means and variances of the residuals across batches in a linear mixed effects model framework. Detailed methods are described in the manuscript at \url{https://www.biorxiv.org/content/10.1101/868810v4}. This is a modification of the ComBat function code from the \code{sva} package that can be found at \url{https://bioconductor.org/packages/release/bioc/html/sva.html} and \code{combat.R} that can be found at \url{https://github.com/Jfortin1/ComBatHarmonization}. Data should be in "long" format. Depends on \code{lme4} package.
 }

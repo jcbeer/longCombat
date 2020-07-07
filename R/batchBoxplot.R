@@ -7,14 +7,14 @@
 #' @param formula character string representing everything on the right side of the formula for the model, in the notation used by \code{lme4} including covariates, time, and any interaction, e.g., \code{"age + sex + diagnosis*time"} fits model with main effects age, sex, diagnosis, and time and the diagnosis*time interaction. Formula should NOT include batchvar and should NOT include random effects.
 #' @param ranef character string representing formula for the random effects in the notation used by \code{lme4}, e.g., \code{"(1|subid)"} fits a random intercept for each unique idvar \code{subid}, and \code{"(1 + time|subid)"} fits a random intercept and slope for unique \code{subid}.
 #' @param data name of the data frame that contains the variables above. Rows are different subject/timepoints (long format), columns are different variables.
-#' @param adjustBatch should residuals be adjusted for batch? (logical \code{TRUE} or \code{FALSE}). Use \code{FALSE} to illustrate additive (and multiplicative) batch effects. Use \code{TRUE} to illustrate only multiplicative batch effects.
+#' @param adjustBatch should residuals be adjusted for batch? (logical \code{TRUE} or \code{FALSE}). Use \code{FALSE} to illustrate additive (and multiplicative) batch effects. Use \code{TRUE} to illustrate only multiplicative batch effects. Default is \code{FALSE}.
 #' @param orderby \code{'mean'} orders boxplots by increasing mean; best for illustrating additive batch effects (use with \code{adjustBatch=FALSE}). \code{'var'} orders boxplots by increasing variance; best for illustrating multiplicative batch effects.
-#' @param plotMeans Should batch means be plotted on top of the boxplots? (logical \code{TRUE} or \code{FALSE}).
-#' @param colors Vector of colors the same length and order as \code{levels(as.factor(data[,batchvar]))} that determines the colors of the boxplots (character string of color names or hexadecimal codes).
+#' @param plotMeans Should batch means be plotted on top of the boxplots? (logical \code{TRUE} or \code{FALSE}). Default is \code{TRUE}.
+#' @param colors Vector of colors the same length and order as \code{levels(as.factor(data[,batchvar]))} that determines the colors of the boxplots (character string of color names or hexadecimal codes). Default is \code{"grey"}.
 #' @param xlabel x-axis label, default is \code{'batch'} (character string).
 #' @param ylabel y-axis label, default is \code{'residuals'} (character string).
 #' @param title main title for the plot, default is no title (character string).
-#' @param verbose prints messages (logical \code{TRUE} or \code{FALSE}).
+#' @param verbose prints messages (logical \code{TRUE} or \code{FALSE}). Default is \code{TRUE}.
 #' @param ... other graphical parameter arguments passed to \code{par()}.
 #' @return Creates a boxplot.
 

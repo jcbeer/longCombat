@@ -19,11 +19,11 @@ multTest(idvar, batchvar, features, formula, ranef, data, verbose = TRUE)
 
 \item{data}{name of the data.frame that contains the variables above. Rows are different subject/timepoints (long format), columns are different variables.}
 
-\item{verbose}{prints messages (logical \code{TRUE} or \code{FALSE}).}
+\item{verbose}{prints messages (logical \code{TRUE} or \code{FALSE}). Default is \code{TRUE}.}
 }
 \value{
 A data frame of Fligner-Killeen test results for each feature.
 }
 \description{
-\code{multTest} function will test (Fligner-Killeen method) for multiplicative batch effects in the residuals for each feature after fitting a linear mixed effects model. Data should be in "long" format. Depends on \code{lme4} package.
+\code{multTest} function will test for multiplicative batch effects in the residuals for each feature after fitting a linear mixed effects model. Uses Fligner-Killeen method. Data should be in "long" format. Depends on \code{lme4} package.
 }

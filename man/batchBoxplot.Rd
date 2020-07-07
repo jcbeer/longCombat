@@ -35,13 +35,13 @@ batchBoxplot(
 
 \item{data}{name of the data frame that contains the variables above. Rows are different subject/timepoints (long format), columns are different variables.}
 
-\item{adjustBatch}{should residuals be adjusted for batch? (logical \code{TRUE} or \code{FALSE}). Use \code{FALSE} to illustrate additive (and multiplicative) batch effects. Use \code{TRUE} to illustrate only multiplicative batch effects.}
+\item{adjustBatch}{should residuals be adjusted for batch? (logical \code{TRUE} or \code{FALSE}). Use \code{FALSE} to illustrate additive (and multiplicative) batch effects. Use \code{TRUE} to illustrate only multiplicative batch effects. Default is \code{FALSE}.}
 
 \item{orderby}{\code{'mean'} orders boxplots by increasing mean; best for illustrating additive batch effects (use with \code{adjustBatch=FALSE}). \code{'var'} orders boxplots by increasing variance; best for illustrating multiplicative batch effects.}
 
-\item{plotMeans}{Should batch means be plotted on top of the boxplots? (logical \code{TRUE} or \code{FALSE}).}
+\item{plotMeans}{Should batch means be plotted on top of the boxplots? (logical \code{TRUE} or \code{FALSE}). Default is \code{TRUE}.}
 
-\item{colors}{Vector of colors the same length and order as \code{levels(as.factor(data[,batchvar]))} that determines the colors of the boxplots (character string of color names or hexadecimal codes).}
+\item{colors}{Vector of colors the same length and order as \code{levels(as.factor(data[,batchvar]))} that determines the colors of the boxplots (character string of color names or hexadecimal codes). Default is \code{"grey"}.}
 
 \item{xlabel}{x-axis label, default is \code{'batch'} (character string).}
 
@@ -49,7 +49,7 @@ batchBoxplot(
 
 \item{title}{main title for the plot, default is no title (character string).}
 
-\item{verbose}{prints messages (logical \code{TRUE} or \code{FALSE}).}
+\item{verbose}{prints messages (logical \code{TRUE} or \code{FALSE}). Default is \code{TRUE}.}
 
 \item{...}{other graphical parameter arguments passed to \code{par()}.}
 }

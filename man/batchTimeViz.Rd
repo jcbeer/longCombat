@@ -28,7 +28,7 @@ batchTimeViz(
 
 \item{data}{name of the data frame that contains the variables above rows are different subject/timepoints (long format), columns are different variables.}
 
-\item{verbose}{prints messages (logical \code{TRUE} or \code{FALSE}).}
+\item{verbose}{prints messages (logical \code{TRUE} or \code{FALSE}). Default is \code{TRUE}.}
 
 \item{...}{other graphical parameter arguments passed to \code{par()}.}
 }
