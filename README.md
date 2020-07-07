@@ -8,4 +8,4 @@ install.packages("devtools")
 devtools::install_github("jcbeer/longCombat")
 ```
 
-[Email Joanne Beer](mailto:joanne.beer@pennmedicine.upenn.edu?subject=[GitHub]%20longCombat) with any questions, comments, or suggestions. Feedback is appreciated. 
+[Contact Joanne Beer](mailto:joanne.beer@pennmedicine.upenn.edu?subject=[GitHub]%20longCombat) with any questions, comments, or suggestions. Feedback is appreciated. 
