@@ -1,13 +1,13 @@
 #' Test for Multiplicative Batch Effects
 #' 
-#' \code{multTest} function will test for multiplicative batch effects in the residuals for each feature after fitting a linear mixed effects model. Uses Fligner-Killeen method. Data should be in "long" format. Depends on \code{lme4} package.
-#' @param idvar name of ID variable (character string).
-#' @param batchvar name of the batch/site/scanner variable (character string).
-#' @param features vector of names of the feature variables (character string) or the numeric indices of the corresponding columns.
-#' @param formula character string representing everything on the right side of the formula for the model, in the notation used by \code{lme4} including covariates, time, and any interactions, e.g., \code{"age + sex + diagnosis*time"} fits model with main effects age, sex, diagnosis, and time and the diagnosis*time interaction. Formula should NOT include batchvar and should NOT include random effects.
-#' @param ranef character string representing formula for the random effects in the notation used by lme4, e.g., \code{"(1|subid)"} fits a random intercept for each unique idvar \code{"subid"}, and \code{"(1 + time|subid)"} fits a random intercept and slope unique \code{"subid"}.
-#' @param data name of the data.frame that contains the variables above. Rows are different subject/timepoints (long format), columns are different variables.
-#' @param verbose prints messages (logical \code{TRUE} or \code{FALSE}). Default is \code{TRUE}.
+#' \code{multTest} function will test for multiplicative batch effects in the residuals for each feature after fitting a linear mixed effects model. Uses Fligner-Killeen method for significance testing. Data should be in "long" format. Depends on \code{lme4} package.
+#' @param idvar character string that specifies name of ID variable. ID variable can be factor, numeric, or character. 
+#' @param batchvar character string that specifies name of the batch variable. Batch variable should be a factor.
+#' @param features character string that specifies names of the numeric feature variables, or the numeric indices of the corresponding columns.
+#' @param formula character string representing all fixed effects on the right side of the formula for the linear mixed effects model. This should be in the notation used by \code{lme4} and include covariates, time, and any interactions. For example, \code{"age + sex + diagnosis*time"} fits model with fixed effects age, sex, diagnosis, time, and the diagnosis*time interaction. Formula should NOT include batchvar and should NOT include random effects.
+#' @param ranef character string representing formula for the random effects in the notation used by \code{lme4}. For example, \code{"(1|subid)"} fits a random intercept for each unique idvar \code{subid}, and \code{"(1 + time|subid)"} fits a random intercept and random slope for each unique \code{subid}.
+#' @param data name of the data frame that contains the variables above. Rows are different observations (subject/timepoints), columns are different variables.
+#' @param verbose prints messages. Logical \code{TRUE} or \code{FALSE}. Default is \code{TRUE}.
 #' @return A data frame of Fligner-Killeen test results for each feature.
 
 multTest <- function(idvar, batchvar, features, 

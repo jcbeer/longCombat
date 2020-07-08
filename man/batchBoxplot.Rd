@@ -23,39 +23,39 @@ batchBoxplot(
 )
 }
 \arguments{
-\item{idvar}{name of ID variable (character string).}
+\item{idvar}{character string that specifies name of ID variable. ID variable can be factor, numeric, or character.}
 
-\item{batchvar}{name of the batch/site/scanner variable (character string).}
+\item{batchvar}{character string that specifies name of the batch variable. Batch variable should be a factor.}
 
-\item{feature}{name of the feature variable (character string) or the numeric index of the corresponding column.}
+\item{feature}{character string that specifies name of the numeric feature variable, or the numeric index of the corresponding column.}
 
-\item{formula}{character string representing everything on the right side of the formula for the model, in the notation used by \code{lme4} including covariates, time, and any interaction, e.g., \code{"age + sex + diagnosis*time"} fits model with main effects age, sex, diagnosis, and time and the diagnosis*time interaction. Formula should NOT include batchvar and should NOT include random effects.}
+\item{formula}{character string representing all fixed effects on the right side of the formula for the linear mixed effects model. This should be in the notation used by \code{lme4} and include covariates, time, and any interactions. For example, \code{"age + sex + diagnosis*time"} fits model with fixed effects age, sex, diagnosis, time, and the diagnosis*time interaction. Formula should NOT include batchvar and should NOT include random effects.}
 
-\item{ranef}{character string representing formula for the random effects in the notation used by \code{lme4}, e.g., \code{"(1|subid)"} fits a random intercept for each unique idvar \code{subid}, and \code{"(1 + time|subid)"} fits a random intercept and slope for unique \code{subid}.}
+\item{ranef}{character string representing formula for the random effects in the notation used by \code{lme4}. For example, \code{"(1|subid)"} fits a random intercept for each unique idvar \code{subid}, and \code{"(1 + time|subid)"} fits a random intercept and random slope for each unique \code{subid}.}
 
-\item{data}{name of the data frame that contains the variables above. Rows are different subject/timepoints (long format), columns are different variables.}
+\item{data}{name of the data frame that contains the variables above. Rows are different observations (subject/timepoints), columns are different variables.}
 
-\item{adjustBatch}{should residuals be adjusted for batch? (logical \code{TRUE} or \code{FALSE}). Use \code{FALSE} to illustrate additive (and multiplicative) batch effects. Use \code{TRUE} to illustrate only multiplicative batch effects. Default is \code{FALSE}.}
+\item{adjustBatch}{should residuals be adjusted for the fixed effect of batch? Logical \code{TRUE} or \code{FALSE}. Use \code{FALSE} to illustrate additive (and multiplicative) batch effects. Use \code{TRUE} to illustrate only multiplicative batch effects. Default is \code{FALSE}.}
 
-\item{orderby}{\code{'mean'} orders boxplots by increasing mean; best for illustrating additive batch effects (use with \code{adjustBatch=FALSE}). \code{'var'} orders boxplots by increasing variance; best for illustrating multiplicative batch effects.}
+\item{orderby}{\code{'mean'} orders boxplots by increasing mean; best for illustrating additive batch effects (use with \code{adjustBatch=FALSE}). \code{'var'} orders boxplots by increasing variance; best for illustrating multiplicative batch effects. Default is \code{'mean'}.}
 
-\item{plotMeans}{Should batch means be plotted on top of the boxplots? (logical \code{TRUE} or \code{FALSE}). Default is \code{TRUE}.}
+\item{plotMeans}{should batch means be plotted on top of the boxplots? Logical \code{TRUE} or \code{FALSE}. Default is \code{TRUE}.}
 
-\item{colors}{Vector of colors the same length and order as \code{levels(as.factor(data[,batchvar]))} that determines the colors of the boxplots (character string of color names or hexadecimal codes). Default is \code{"grey"}.}
+\item{colors}{vector of colors the same length and order as \code{levels(as.factor(data[,batchvar]))} that determines the colors of the boxplots (character string of color names or hexadecimal codes). Default is \code{"grey"} for all.}
 
-\item{xlabel}{x-axis label, default is \code{'batch'} (character string).}
+\item{xlabel}{x-axis label (character string). Default is \code{'batch'}.}
 
-\item{ylabel}{y-axis label, default is \code{'residuals'} (character string).}
+\item{ylabel}{y-axis label (character string). Default is \code{'residuals'}.}
 
 \item{title}{main title for the plot, default is no title (character string).}
 
-\item{verbose}{prints messages (logical \code{TRUE} or \code{FALSE}). Default is \code{TRUE}.}
+\item{verbose}{prints messages. Logical \code{TRUE} or \code{FALSE}. Default is \code{TRUE}.}
 
-\item{...}{other graphical parameter arguments passed to \code{par()}.}
+\item{...}{other graphical parameter arguments passed to \code{\link[graphics]{par}}.}
 }
 \value{
 Creates a boxplot.
 }
 \description{
-\code{batchBoxplot} function will plot residuals of linear mixed effect model for a simgle feature by batch to visualize additive and multiplicative batch effects. Data should be in "long" format. Depends on \code{lme4} packages.
+\code{batchBoxplot} function will plot residuals of linear mixed effects model for a single feature by batch to visualize additive and multiplicative batch effects. Data should be in "long" format. Depends on \code{lme4} package.
 }

@@ -18,30 +18,30 @@ longCombat(
 )
 }
 \arguments{
-\item{idvar}{name of ID variable (character string).}
+\item{idvar}{character string that specifies name of ID variable. ID variable can be factor, numeric, or character.}
 
-\item{timevar}{name of variable that distinguishes within-subject repeated measures, e.g., time, age, or visit (character string).}
+\item{timevar}{character string that specifies name of numeric variable that distinguishes within-subject repeated measures, e.g., time, age, or visit.}
 
-\item{batchvar}{name of the batch/site/scanner variable (character string).}
+\item{batchvar}{character string that specifies name of the batch variable. Batch variable should be a factor.}
 
-\item{features}{vector of names of the feature variables (character string) or the numeric indices of the corresponding columns.}
+\item{features}{character string that specifies names of the numeric feature variables, or the numeric indices of the corresponding columns.}
 
-\item{formula}{character string representing everything on the right side of the formula for the model, in the notation used by \code{lme4} including covariates, time, and any interactions, e.g., \code{"age + sex + diagnosis*time"} fits model with main effects age, sex, diagnosis, and time and the diagnosis*time interaction. Formula should NOT include batchvar and should NOT include random effects.}
+\item{formula}{character string representing all fixed effects on the right side of the formula for the linear mixed effects model. This should be in the notation used by \code{lme4} and include covariates, time, and any interactions. For example, \code{"age + sex + diagnosis*time"} fits model with fixed effects age, sex, diagnosis, time, and the diagnosis*time interaction. Formula should NOT include batchvar and should NOT include random effects.}
 
-\item{ranef}{character string representing formula for the random effects in the notation used by \code{lme4}, e.g., \code{"(1|subid)"} fits a random intercept for each unique idvar \code{subid}, and \code{"(1 + time|subid)"} fits a random intercept and slope for unique \code{subid}.}
+\item{ranef}{character string representing formula for the random effects in the notation used by \code{lme4}. For example, \code{"(1|subid)"} fits a random intercept for each unique idvar \code{subid}, and \code{"(1 + time|subid)"} fits a random intercept and random slope for each unique \code{subid}.}
 
-\item{data}{name of the data frame that contains the variables above. Rows are different subject/timepoints (long format); columns are different variables.}
+\item{data}{name of the data frame that contains the variables above. Rows are different observations (subject/timepoints), columns are different variables.}
 
 \item{niter}{number of iterations for empirical Bayes step. Usually converges quickly in less than 30 iterations. Default is 30.}
 
-\item{method}{method for estimating sigma in standardization step (character string). \code{'REML'} (default, more conservative type I error control) or \code{'MSR'} (more powerful, may not control type I error at nominal level).}
+\item{method}{method for estimating sigma in standardization step (character string). \code{'REML'} (default, more conservative type I error control) or \code{'MSR'} (more powerful, less conservative type I error control).}
 
-\item{verbose}{prints messages (logical \code{TRUE} or \code{FALSE}). Default is \code{TRUE}.}
+\item{verbose}{prints messages. Logical \code{TRUE} or \code{FALSE}. Default is \code{TRUE}.}
 }
 \value{
 Function outputs a list including the following:
 \describe{
-\item{\code{data_combat}}{data frame with columns idvar, timevar, and ComBat harmonized data}
+\item{\code{data_combat}}{data frame with columns idvar, timevar, and ComBat-harmonized data for each feature}
 \item{\code{gammahat}}{data frame containing mean of standardized data for each batch (row) and feature (column)}
 \item{\code{delta2hat}}{data frame containing variance of standardized data for each batch (row) and feature (column)}
 \item{\code{gammastarhat}}{data frame containing empirical Bayes estimate of additive batch effects}

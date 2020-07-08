@@ -1,18 +1,19 @@
 #' Visualize Batches Over Time
 #' 
 #' \code{batchTimeViz} is a simple function that will visualize batches over time for multi-batch longitudinal data. Data should be in "long" format.
-#' @param batchvar name of the batch/site/scanner variable (character string).
-#' @param timevar name of the time variable, e.g. age or time from baseline (character string).
-#' @param xlabel x-axis label, default is \code{'time'} (character string).
-#' @param ylabel y-axis label, default is \code{'batch'} (character string).
-#' @param title main title for the plot, default is no title (character string).
-#' @param data name of the data frame that contains the variables above rows are different subject/timepoints (long format), columns are different variables.
-#' @param verbose prints messages (logical \code{TRUE} or \code{FALSE}). Default is \code{TRUE}.
-#' @param ... other graphical parameter arguments passed to \code{par()}.
+#' @param batchvar character string that specifies name of the batch variable. Batch variable should be a factor.
+#' @param timevar character string that specifies name of numeric variable that distinguishes within-subject repeated measures, e.g., time, age, or visit. Will be plotted along x-axis.
+#' @param data name of the data frame that contains the variables above. Rows are different observations (subject/timepoints), columns are different variables.
+#' @param xlabel x-axis label (character string). Default is \code{'time'}.
+#' @param ylabel y-axis label (character string). Default is \code{'batch'}.
+#' @param title main title for the plot (character string). Default is no title.
+#' @param verbose prints messages. Logical \code{TRUE} or \code{FALSE}. Default is \code{TRUE}.
+#' @param ... other graphical parameter arguments passed to \code{\link[graphics]{par}}.
 #' @return Creates a plot.
 
-batchTimeViz <- function(batchvar, timevar, xlabel='time', ylabel='batch', 
-                     title='', data, verbose=TRUE, ...){
+batchTimeViz <- function(batchvar, timevar, data, 
+                         xlabel='time', ylabel='batch', title='', 
+                         verbose=TRUE, ...){
   
   # make batch a factor if not already
   batch <- as.factor(data[,batchvar])

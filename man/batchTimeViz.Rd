@@ -7,30 +7,30 @@
 batchTimeViz(
   batchvar,
   timevar,
+  data,
   xlabel = "time",
   ylabel = "batch",
   title = "",
-  data,
   verbose = TRUE,
   ...
 )
 }
 \arguments{
-\item{batchvar}{name of the batch/site/scanner variable (character string).}
+\item{batchvar}{character string that specifies name of the batch variable. Batch variable should be a factor.}
 
-\item{timevar}{name of the time variable, e.g. age or time from baseline (character string).}
+\item{timevar}{character string that specifies name of numeric variable that distinguishes within-subject repeated measures, e.g., time, age, or visit. Will be plotted along x-axis.}
 
-\item{xlabel}{x-axis label, default is \code{'time'} (character string).}
+\item{data}{name of the data frame that contains the variables above. Rows are different observations (subject/timepoints), columns are different variables.}
 
-\item{ylabel}{y-axis label, default is \code{'batch'} (character string).}
+\item{xlabel}{x-axis label (character string). Default is \code{'time'}.}
 
-\item{title}{main title for the plot, default is no title (character string).}
+\item{ylabel}{y-axis label (character string). Default is \code{'batch'}.}
 
-\item{data}{name of the data frame that contains the variables above rows are different subject/timepoints (long format), columns are different variables.}
+\item{title}{main title for the plot (character string). Default is no title.}
 
-\item{verbose}{prints messages (logical \code{TRUE} or \code{FALSE}). Default is \code{TRUE}.}
+\item{verbose}{prints messages. Logical \code{TRUE} or \code{FALSE}. Default is \code{TRUE}.}
 
-\item{...}{other graphical parameter arguments passed to \code{par()}.}
+\item{...}{other graphical parameter arguments passed to \code{\link[graphics]{par}}.}
 }
 \value{
 Creates a plot.

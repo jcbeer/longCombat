@@ -9,6 +9,7 @@ trajPlot(
   timevar,
   feature,
   batchvar,
+  data,
   point.shape = NULL,
   point.col = NULL,
   line.col = NULL,
@@ -19,7 +20,6 @@ trajPlot(
   xlimits = NULL,
   ylimits = NULL,
   margins = c(5, 5, 3, 1),
-  data,
   verbose = TRUE,
   ...
 )
@@ -32,6 +32,8 @@ trajPlot(
 \item{feature}{character string that specifies name of the numeric feature variable to be plotted over time, or the numeric index of the corresponding column. Will be plotted along y-axis.}
 
 \item{batchvar}{character string that specifies name of the batch variable. Batch variable should be a factor. Will determine the shape of plotting points.}
+
+\item{data}{name of the data frame that contains the variables above. Rows are different observations (subject/timepoints), columns are different variables.}
 
 \item{point.shape}{optional numeric vector that encodes the point shape for the batch variable levels. If not using default setting, length should be equal to number of unique observations included (\code{nrow(data)}) and in the same order as in the data frame. See the \code{pch} argument in \code{\link[graphics]{points}}. Default cycles through \code{pch=c(1:25, 0)} by batch level.}
 
@@ -53,9 +55,7 @@ trajPlot(
 
 \item{margins}{numeric vector of 4 values specifying margins in the order (bottom, left, top, right).}
 
-\item{data}{name of the data frame that contains the variables above. Rows are different observations (subject/timepoints), columns are different variables.}
-
-\item{verbose}{prints messages (logical \code{TRUE} or \code{FALSE}). Default is \code{TRUE}.}
+\item{verbose}{prints messages. Logical \code{TRUE} or \code{FALSE}. Default is \code{TRUE}.}
 
 \item{...}{other graphical parameter arguments passed to \code{\link[graphics]{par}}.}
 }
