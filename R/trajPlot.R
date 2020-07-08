@@ -19,6 +19,8 @@
 #' @param verbose prints messages. Logical \code{TRUE} or \code{FALSE}. Default is \code{TRUE}.
 #' @param ... other graphical parameter arguments passed to \code{\link[graphics]{par}}.
 #' @return Creates a plot.
+#' 
+#' @export
 
 trajPlot <- function(idvar, timevar, feature, batchvar, data,
                      point.shape=NULL, point.col=NULL, 

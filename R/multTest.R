@@ -9,6 +9,8 @@
 #' @param data name of the data frame that contains the variables above. Rows are different observations (subject/timepoints), columns are different variables.
 #' @param verbose prints messages. Logical \code{TRUE} or \code{FALSE}. Default is \code{TRUE}.
 #' @return A data frame of Fligner-Killeen test results for each feature.
+#' 
+#' @export
 
 multTest <- function(idvar, batchvar, features, 
                        formula, ranef, data, verbose=TRUE){

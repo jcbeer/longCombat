@@ -17,6 +17,8 @@
 #' @param verbose prints messages. Logical \code{TRUE} or \code{FALSE}. Default is \code{TRUE}.
 #' @param ... other graphical parameter arguments passed to \code{\link[graphics]{par}}.
 #' @return Creates a boxplot.
+#' 
+#' @export
 
 batchBoxplot <- function(idvar, batchvar, feature, 
                          formula, ranef, data,

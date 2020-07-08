@@ -10,6 +10,8 @@
 #' @param verbose prints messages. Logical \code{TRUE} or \code{FALSE}. Default is \code{TRUE}.
 #' @param ... other graphical parameter arguments passed to \code{\link[graphics]{par}}.
 #' @return Creates a plot.
+#' 
+#' @export
 
 batchTimeViz <- function(batchvar, timevar, data, 
                          xlabel='time', ylabel='batch', title='', 

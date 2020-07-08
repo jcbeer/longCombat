@@ -19,6 +19,8 @@
 #'     \item{\code{gammastarhat}}{data frame containing empirical Bayes estimate of additive batch effects}
 #'     \item{\code{delta2starhat}}{data frame containing empirical Bayes estimate of multiplicative batch effects}
 #'     }
+#'     
+#' @export
 
 longCombat <- function(idvar, timevar, batchvar, features, 
                        formula, ranef, data, niter=30, method='REML', verbose=TRUE){
