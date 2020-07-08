@@ -12,6 +12,7 @@ trajPlot(
   point.shape = NULL,
   point.col = NULL,
   line.col = NULL,
+  line.type = NULL,
   xlabel = "time",
   ylabel = "feature",
   title = "",
@@ -25,37 +26,39 @@ trajPlot(
 )
 }
 \arguments{
-\item{idvar}{name of ID variable (character string).}
+\item{idvar}{character string that specifies name of ID variable. ID variable can be factor, numeric, or character.}
 
-\item{timevar}{name of variable that distinguishes within-subject repeated measures, e.g., time, age, or visit (character string). Will be plotted along x-axis.}
+\item{timevar}{character string that specifies name of numeric variable that distinguishes within-subject repeated measures, e.g., time, age, or visit. Will be plotted along x-axis.}
 
-\item{feature}{name of the feature variable (character string) to be plotted over time, or the numeric index of the corresponding column. Will be plotted along y-axis.}
+\item{feature}{character string that specifies name of the numeric feature variable to be plotted over time, or the numeric index of the corresponding column. Will be plotted along y-axis.}
 
-\item{batchvar}{name of the batch/site/scanner variable (character string). Will determine the shape of plotting points.}
+\item{batchvar}{character string that specifies name of the batch variable. Batch variable should be a factor. Will determine the shape of plotting points.}
 
-\item{point.shape}{vector that encodes the point shape for the batch variable levels. Should be in the same order as \code{levels(data[subset, batchvar])}. See the \code{pch} argument in \code{?points}. Default cycles through \code{pch=c(1:25, 0)} by batch level.}
+\item{point.shape}{\link{optional} numeric vector that encodes the point shape for the batch variable levels. If not using default setting, length should be equal to number of unique observations included (\code{nrow(data)}) and in the same order as in the data frame. See the \code{pch} argument in \code{\link[graphics]{points}}. Default cycles through \code{pch=c(1:25, 0)} by batch level.}
 
-\item{point.col}{vector that encodes colors of the point for each observation (character string of color names or hexadecimal codes). Length should be equal to number of unique observations included (\code{nrow(data[subset,])}) and in the same order as in the data frame. Default is \code{'black'} for all.}
+\item{point.col}{\link{optional} vector that encodes colors of the point for each observation (character string of color names or hexadecimal codes). Length should be equal to number of unique observations included (\code{nrow(data)}) and in the same order as in the data frame. Default is \code{'black'} for all.}
 
-\item{line.col}{vector that encodes colors of the line for each subject (character string of color names or hexadecimal codes). Length should be equal to number of unique subjects included (\code{length(unique(data[subset,idvar]))}) and in the same order as in the data frame. Default is \code{'black'} for all.}
+\item{line.col}{\link{optional} vector that encodes colors of the line for each subject (character string of color names or hexadecimal codes). Length should be equal to number of unique subjects included (\code{length(unique(data[,idvar]))}) and in the same order as in the data frame. Default is \code{'black'} for all.}
 
-\item{xlabel}{x-axis label, default is \code{'time'} (character string).}
+\item{line.type}{\link{optional} numeric or character vector that encodes line type for each subject. Length should be equal to number of unique subjects included (\code{length(unique(data[,idvar]))}) and in the same order as in the data frame. See the \code{lty} argument in \code{\link[graphics]{par}}. Default is \code{'solid'} for all.}
 
-\item{ylabel}{y-axis label, default is \code{'feature'} (character string).}
+\item{xlabel}{x-axis label (character string), default is \code{'time'}.}
 
-\item{title}{main title for the plot, default is no title (character string).}
+\item{ylabel}{y-axis label (character string), default is \code{'feature'}.}
 
-\item{xlimits}{two dimensional numeric vector giving minimum and maximum x-axis values.}
+\item{title}{main title for the plot (character string), default is no title.}
 
-\item{ylimits}{two dimensional numeric vector giving minimum and maximum y-axis values.}
+\item{xlimits}{two dimensional numeric vector giving minimum and maximum x-axis values. Default is minimum and maximum time variable values.}
+
+\item{ylimits}{two dimensional numeric vector giving minimum and maximum y-axis values. Default is minimum and maximum feature variable values.}
+
+\item{margins}{numeric vector of 4 values specifying margins in the order (bottom, left, top, right).}
 
 \item{data}{name of the data frame that contains the variables above. Rows are different observations (subject/timepoints), columns are different variables.}
 
-\item{subset}{logical or numeric 0/1 vector the same length as \code{nrow(data)} denoting which observations (i.e., rows) to plot. Default is to include all rows.}
-
 \item{verbose}{prints messages (logical \code{TRUE} or \code{FALSE}). Default is \code{TRUE}.}
 
-\item{...}{other graphical parameter arguments passed to \code{par()}.}
+\item{...}{other graphical parameter arguments passed to \code{\link[graphics]{par}}.}
 }
 \value{
 Creates a plot.
