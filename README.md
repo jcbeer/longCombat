@@ -1,3 +1,5 @@
+[![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.3936045.svg)](https://doi.org/10.5281/zenodo.3936045)
+
 # longCombat: Longitudinal ComBat R Package
 
 Longitudinal ComBat uses an empirical Bayes method to harmonize means and variances of the residuals across batches in a linear mixed effects model framework. Detailed methods are described in the manuscript: 
