@@ -5,13 +5,13 @@
 #' @param timevar character string that specifies name of numeric variable that distinguishes within-subject repeated measures, e.g., time, age, or visit. Will be plotted along x-axis.
 #' @param feature character string that specifies name of the numeric feature variable to be plotted over time, or the numeric index of the corresponding column. Will be plotted along y-axis.
 #' @param batchvar character string that specifies name of the batch variable. Batch variable should be a factor. Will determine the shape of plotting points.
-#' @param point.shape [optional] numeric vector that encodes the point shape for the batch variable levels. If not using default setting, length should be equal to number of unique observations included (\code{nrow(data)}) and in the same order as in the data frame. See the \code{pch} argument in \code{\link[graphics]{points}}. Default cycles through \code{pch=c(1:25, 0)} by batch level.
-#' @param point.col [optional] vector that encodes colors of the point for each observation (character string of color names or hexadecimal codes). Length should be equal to number of unique observations included (\code{nrow(data)}) and in the same order as in the data frame. Default is \code{'black'} for all.
-#' @param line.col [optional] vector that encodes colors of the line for each subject (character string of color names or hexadecimal codes). Length should be equal to number of unique subjects included (\code{length(unique(data[,idvar]))}) and in the same order as in the data frame. Default is \code{'black'} for all.
-#' @param line.type [optional] numeric or character vector that encodes line type for each subject. Length should be equal to number of unique subjects included (\code{length(unique(data[,idvar]))}) and in the same order as in the data frame. See the \code{lty} argument in \code{\link[graphics]{par}}. Default is \code{'solid'} for all.
-#' @param xlabel x-axis label (character string), default is \code{'time'}.
-#' @param ylabel y-axis label (character string), default is \code{'feature'}.
-#' @param title main title for the plot (character string), default is no title.
+#' @param point.shape optional numeric vector that encodes the point shape for the batch variable levels. If not using default setting, length should be equal to number of unique observations included (\code{nrow(data)}) and in the same order as in the data frame. See the \code{pch} argument in \code{\link[graphics]{points}}. Default cycles through \code{pch=c(1:25, 0)} by batch level.
+#' @param point.col optional vector that encodes colors of the point for each observation (character string of color names or hexadecimal codes). Length should be equal to number of unique observations included (\code{nrow(data)}) and in the same order as in the data frame. Default is \code{'black'} for all.
+#' @param line.col optional vector that encodes colors of the line for each subject (character string of color names or hexadecimal codes). Length should be equal to number of unique subjects included (\code{length(unique(data[,idvar]))}) and in the same order as in the data frame. Default is \code{'black'} for all.
+#' @param line.type optional numeric or character vector that encodes line type for each subject. Length should be equal to number of unique subjects included (\code{length(unique(data[,idvar]))}) and in the same order as in the data frame. See the \code{lty} argument in \code{\link[graphics]{par}}. Default is \code{'solid'} for all.
+#' @param xlabel x-axis label (character string). Default is \code{'time'}.
+#' @param ylabel y-axis label (character string). Default is \code{'feature'}.
+#' @param title main title for the plot (character string). Default is no title.
 #' @param xlimits two dimensional numeric vector giving minimum and maximum x-axis values. Default is minimum and maximum time variable values.
 #' @param ylimits two dimensional numeric vector giving minimum and maximum y-axis values. Default is minimum and maximum feature variable values.
 #' @param margins numeric vector of 4 values specifying margins in the order (bottom, left, top, right).
@@ -25,7 +25,7 @@ trajPlot <- function(idvar, timevar, feature, batchvar,
                      line.col=NULL, line.type=NULL,
                      xlabel='time', ylabel='feature', title='', 
                      xlimits=NULL, ylimits=NULL, margins=c(5, 5, 3, 1),
-                     data, subset=rep(TRUE, nrow(data)), verbose=TRUE, ...){
+                     data, verbose=TRUE, ...){
   
   # number of unique subjects 
   subjectIDs <- unique(data[,idvar])

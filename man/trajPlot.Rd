@@ -20,7 +20,6 @@ trajPlot(
   ylimits = NULL,
   margins = c(5, 5, 3, 1),
   data,
-  subset = rep(TRUE, nrow(data)),
   verbose = TRUE,
   ...
 )
@@ -34,19 +33,19 @@ trajPlot(
 
 \item{batchvar}{character string that specifies name of the batch variable. Batch variable should be a factor. Will determine the shape of plotting points.}
 
-\item{point.shape}{\link{optional} numeric vector that encodes the point shape for the batch variable levels. If not using default setting, length should be equal to number of unique observations included (\code{nrow(data)}) and in the same order as in the data frame. See the \code{pch} argument in \code{\link[graphics]{points}}. Default cycles through \code{pch=c(1:25, 0)} by batch level.}
+\item{point.shape}{optional numeric vector that encodes the point shape for the batch variable levels. If not using default setting, length should be equal to number of unique observations included (\code{nrow(data)}) and in the same order as in the data frame. See the \code{pch} argument in \code{\link[graphics]{points}}. Default cycles through \code{pch=c(1:25, 0)} by batch level.}
 
-\item{point.col}{\link{optional} vector that encodes colors of the point for each observation (character string of color names or hexadecimal codes). Length should be equal to number of unique observations included (\code{nrow(data)}) and in the same order as in the data frame. Default is \code{'black'} for all.}
+\item{point.col}{optional vector that encodes colors of the point for each observation (character string of color names or hexadecimal codes). Length should be equal to number of unique observations included (\code{nrow(data)}) and in the same order as in the data frame. Default is \code{'black'} for all.}
 
-\item{line.col}{\link{optional} vector that encodes colors of the line for each subject (character string of color names or hexadecimal codes). Length should be equal to number of unique subjects included (\code{length(unique(data[,idvar]))}) and in the same order as in the data frame. Default is \code{'black'} for all.}
+\item{line.col}{optional vector that encodes colors of the line for each subject (character string of color names or hexadecimal codes). Length should be equal to number of unique subjects included (\code{length(unique(data[,idvar]))}) and in the same order as in the data frame. Default is \code{'black'} for all.}
 
-\item{line.type}{\link{optional} numeric or character vector that encodes line type for each subject. Length should be equal to number of unique subjects included (\code{length(unique(data[,idvar]))}) and in the same order as in the data frame. See the \code{lty} argument in \code{\link[graphics]{par}}. Default is \code{'solid'} for all.}
+\item{line.type}{optional numeric or character vector that encodes line type for each subject. Length should be equal to number of unique subjects included (\code{length(unique(data[,idvar]))}) and in the same order as in the data frame. See the \code{lty} argument in \code{\link[graphics]{par}}. Default is \code{'solid'} for all.}
 
-\item{xlabel}{x-axis label (character string), default is \code{'time'}.}
+\item{xlabel}{x-axis label (character string). Default is \code{'time'}.}
 
-\item{ylabel}{y-axis label (character string), default is \code{'feature'}.}
+\item{ylabel}{y-axis label (character string). Default is \code{'feature'}.}
 
-\item{title}{main title for the plot (character string), default is no title.}
+\item{title}{main title for the plot (character string). Default is no title.}
 
 \item{xlimits}{two dimensional numeric vector giving minimum and maximum x-axis values. Default is minimum and maximum time variable values.}
 
