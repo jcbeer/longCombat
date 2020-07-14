@@ -32,7 +32,13 @@ longCombat <- function(idvar, timevar, batchvar, features,
     stop(message)
   }
   # make batch a factor if not already
-  batch <- as.factor(data[,batchvar])
+  batch <- droplevels(as.factor(data[,batchvar]))
+  # check for batches with only one observation
+  if (min(table(batch)) <= 1) {
+    batch_single <- paste(names(table(batch))[table(batch) <= 1], collapse=', ')
+    message <- paste0('The following batches have only one observation:\n\n', batch_single, '\n\nlongCombat needs at least 2 observations per batch to harmonize variance across batch. Remove rows for these batches before running longCombat.')
+    stop(message)
+  }
   if (verbose) cat("[longCombat] found", nlevels(batch), 'batches\n')
   # number of batches
   m <- nlevels(batch)
