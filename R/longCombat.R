@@ -182,10 +182,10 @@ longCombat <- function(idvar, timevar, batchvar, features,
   ##############################
   # label the data
   ##############################
-  # add IDs and time variable to data_combat
-  data_combat <- cbind(data[,c(idvar, timevar)], data_combat)
+  # add IDs, time variable, and batch variable to data_combat
+  data_combat <- cbind(data[,c(idvar, timevar, batchvar)], data_combat)
   # add names
-  colnames(data_combat) <- c(idvar, timevar, paste0(featurenames, '.combat'))
+  colnames(data_combat) <- c(idvar, timevar, batchvar, paste0(featurenames, '.combat'))
   colnames(gammahat) <- featurenames
   colnames(delta2hat) <- featurenames
   colnames(gammastarhat_final) <- featurenames
@@ -199,7 +199,9 @@ longCombat <- function(idvar, timevar, batchvar, features,
   # return results
   ##############################
   return(list(data_combat=data_combat,
-              gammahat=gammahat, delta2hat=delta2hat,
-              gammastarhat=gammastarhat_final, delta2starhat=delta2starhat_final
+              gammahat=gammahat, 
+              delta2hat=delta2hat,
+              gammastarhat=gammastarhat_final, 
+              delta2starhat=delta2starhat_final
               ))
 }
