@@ -42,7 +42,7 @@ batchBoxplot <- function(idvar, batchvar, feature,
   }
   
   ##############################
-  # fit liner mixed effect model
+  # fit linear mixed effect model
   ##############################
   if (verbose) cat(paste0('[longCombat] fitting lme model for feature ', feature, '\n'))
   # make the lmer formula
@@ -70,7 +70,7 @@ batchBoxplot <- function(idvar, batchvar, feature,
   # make plot
   ##############################
   par(mar=c(3, 5, 3, 1), ...)
-  boxplot(fit_residuals$residuals ~ batchorder, main=title, ylab='', xlab='', lty=1, col=colors[batchorder], las=1, xaxt='n')
+  boxplot(fit_residuals$residuals ~ batchorder, main=title, ylab='', xlab='', lty=1, col=colors, las=1, xaxt='n')
   if (plotMeans==TRUE){
     points(fit_residuals_means[,2][order(fit_residuals_means[,2])], pch=5, col='red', cex=0.6)
   }
