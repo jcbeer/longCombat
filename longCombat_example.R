@@ -111,9 +111,6 @@ rm('features', 'batch.patterns', 'batch.pattern.sample', 'i')
 
 #################################
 # batchTimeViz() -- visualize change in batch over time
-# (NOTE: for the simulated data
-# each batch is distributed over all time points
-# so the plot is not that interesting)
 #################################
 batchTimeViz(batchvar='batch',
              timevar='time',
