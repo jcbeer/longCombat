@@ -1,48 +1,97 @@
 ###########################################################
 # longCombat package examples
 # JCBeer joanne.beer@pennmedicine.upenn.edu
-# 11 Feb 2021
+# 13 Sept 2021
 ###########################################################
 
 #################################
 # install longCombat package
 #################################
-devtools::install_github("jcbeer/longCombat")
+# install.packages('devtools')
+# devtools::install_github("jcbeer/longCombat")
 
 #################################
 # load longCombat package
 #################################
 library(longCombat)
+# check documentation
+?longCombat
+
+#################################
+# install and load invgamma package
+#################################
+# install.packages('invgamma')
+library(invgamma)
 
 #################################
 # simulate data to run the functions
 #################################
-# 10 subjects with 5 time points each
-# 3 scanners / batches
+# 100 subjects with 5 time points each
+# 8 scanners / batches
 # 20 features
 #################################
 # set random seed
 set.seed(1)
 # simulate the covariates
 simdata <- data.frame(
-  subid=rep(1:10, each=5),
-  age=rep(sample(c(20:60), 10), each=5),
-  diagnosis=rep(c(0,1), each=25),
-  time=rep(0:4, times=10),
-  batch=sample(1:3, 50, replace=TRUE)
+  subid=rep(1:100, each=5),
+  age=rep(sample(c(20:60), 100, replace=TRUE), each=5),
+  diagnosis=rep(c(0,1), each=250),
+  time=rep(0:4, times=100)
   )
+# define 4 batch patterns 
+# each column of this matrix represents a batch pattern over time
+batch.patterns <- matrix(c(1,1,1,2,2,
+                           3,3,4,4,5,
+                           6,6,6,6,6,
+                           7,7,8,8,8),
+                         ncol=4)
+# randomly sample 100 batch patterns
+batch.pattern.sample <- sample(1:4, 100, replace=TRUE)
+simdata$batch <- as.vector(batch.patterns[,batch.pattern.sample])
 # simulate the brain features 
-features <- matrix(rnorm(50*20), nrow=50)
-# add a batch effect to the features
-features <- (features*simdata$batch) + 2*simdata$batch
+features <- matrix(rnorm(100*5*20), nrow=500)
+# simulate additive batch effects (normally distributed)
+gamma <- runif(n=8, min=-5, max=5)
+tau <- runif(n=8, min=0.1, max=0.3)
+batch.add <- matrix(c(
+  rnorm(mean=gamma[1], sd=tau[1], n=20),
+  rnorm(mean=gamma[2], sd=tau[2], n=20),
+  rnorm(mean=gamma[3], sd=tau[3], n=20),
+  rnorm(mean=gamma[4], sd=tau[4], n=20),
+  rnorm(mean=gamma[5], sd=tau[5], n=20),
+  rnorm(mean=gamma[6], sd=tau[6], n=20),
+  rnorm(mean=gamma[7], sd=tau[7], n=20),
+  rnorm(mean=gamma[8], sd=tau[8], n=20)),
+  ncol=8) 
+# simulate multiplicative batch effects (inverse gamma distributed)
+lambda <- sample(c(2, 3), 8, replace=TRUE)
+theta <- sample(c(0.5, 1), 8, replace=TRUE)
+batch.mult <- matrix(c(
+  rinvgamma(n=20, shape=lambda[1], scale=theta[1]),
+  rinvgamma(n=20, shape=lambda[2], scale=theta[2]),
+  rinvgamma(n=20, shape=lambda[3], scale=theta[3]),
+  rinvgamma(n=20, shape=lambda[4], scale=theta[4]),
+  rinvgamma(n=20, shape=lambda[5], scale=theta[5]),
+  rinvgamma(n=20, shape=lambda[6], scale=theta[6]),
+  rinvgamma(n=20, shape=lambda[7], scale=theta[7]),
+  rinvgamma(n=20, shape=lambda[8], scale=theta[8])),
+  ncol=8)
+# add / multiply batch effects to the features
+for(i in 1:500){
+  features[i,] <- features[i,]*batch.mult[,simdata$batch[i]] + batch.add[,simdata$batch[i]]
+}
 # add covariate effects to the features
-features <- features + simdata$subid -0.01*simdata$age + simdata$diagnosis - 0.5*simdata$time - simdata$diagnosis*simdata$time 
+features <- features - 0.1*simdata$age + simdata$diagnosis - 0.5*simdata$time - 2*simdata$diagnosis*simdata$time 
+# add subject random effect to the features (will be the same across features in this case)
+features <- features + rep(rnorm(n=100), each=5)
 # save feature names
 featurenames <- paste0('feature', 1:20)
 colnames(features) <- featurenames
 # combine into one data frame
 simdata <- data.frame(simdata, features)
-rm('features')
+# remove some stuff no longer needed
+rm('features', 'batch.patterns', 'batch.pattern.sample', 'i')
 
 #################################
 # longCombat functions:
@@ -74,9 +123,6 @@ batchTimeViz(batchvar='batch',
 # batchBoxplot() -- to visualize residuals across batches
 # can do for each feature you are interested in
 #################################
-# color by batch
-cols <- c('lightsalmon', 'lightblue', 'darkseagreen1')
-
 # make batch boxplot for feature1, do not adjust for batch 
 batchBoxplot(idvar='subid', 
              batchvar='batch', 
@@ -84,7 +130,7 @@ batchBoxplot(idvar='subid',
              formula='age + diagnosis*time',
              ranef='(1|subid)',
              data=simdata,
-             colors=cols)
+             colors=1:8)
 
 # make batch boxplot for feature2, do not adjust for batch 
 batchBoxplot(idvar='subid', 
@@ -93,7 +139,7 @@ batchBoxplot(idvar='subid',
              formula='age + diagnosis*time',
              ranef='(1|subid)',   
              data=simdata,
-             colors=cols)
+             colors=1:8)
 
 # make batch boxplot for feature2, DO adjust for batch 
 # order by increasing batch variance
@@ -106,7 +152,7 @@ batchBoxplot(idvar='subid',
              data=simdata,
              adjustBatch=TRUE,
              orderby='var',
-             colors=cols)
+             colors=1:8)
 
 #################################
 # trajPlot() -- visualize trajectories
@@ -116,19 +162,24 @@ trajPlot(idvar='subid',
          timevar='time',
          feature='feature2', 
          batchvar='batch',  
-         data=simdata)
+         data=simdata,
+         point.col=simdata$batch,
+         line.col=simdata$diagnosis[!duplicated(simdata$subid)]+1)
 # for only diagnosis=0
 trajPlot(idvar='subid', 
          timevar='time',
          feature='feature2', 
          batchvar='batch',  
-         data=simdata[simdata$diagnosis==0,])
+         data=simdata[simdata$diagnosis==0,],
+         point.col=simdata$batch[simdata$diagnosis==0])
 # for only diagnosis=1
 trajPlot(idvar='subid', 
          timevar='time',
          feature='feature2', 
          batchvar='batch',  
-         data=simdata[simdata$diagnosis==1,])
+         data=simdata[simdata$diagnosis==1,],
+         point.col=simdata$batch[simdata$diagnosis==1],
+         line.col=rep(2,250))
 
 #################################
 # addTest() -- test for additive scanner effects
@@ -141,16 +192,27 @@ addTestTable <- addTest(idvar='subid',
         data=simdata)
 
 # when we generate data with set.seed(1)
-# feature6 has largest additive scanner effects
+# feature5 has largest additive scanner effects
 # (since it is the first row in the addTestTable)
 # check boxplot to see this
 batchBoxplot(idvar='subid', 
              batchvar='batch', 
-             feature='feature6', 
+             feature='feature5', 
              formula='age + diagnosis*time',
              ranef='(1|subid)',
              data=simdata,
-             colors=cols)
+             colors=1:8,
+             title='Feature 5')
+
+# compare with feature 2
+batchBoxplot(idvar='subid', 
+             batchvar='batch', 
+             feature='feature2', 
+             formula='age + diagnosis*time',
+             ranef='(1|subid)',
+             data=simdata,
+             colors=1:8,
+             title='Feature 2')
 
 #################################
 # multTest() -- test for multiplicative scanner effects
@@ -163,20 +225,33 @@ multTestTable <- multTest(idvar='subid',
                         data=simdata)
 
 # when we generate data with set.seed(1)
-# feature8 has largest multiplicative scanner effects
+# feature3 has largest multiplicative scanner effects
 # (since it is the first row in the multTestTable)
 # check boxplot to see this
 # (we will adjust for batch and order by variance
 # to best see the multiplicative batch effects)
 batchBoxplot(idvar='subid', 
              batchvar='batch', 
-             feature='feature8', 
+             feature='feature3', 
              formula='age + diagnosis*time',
              ranef='(1|subid)',
              data=simdata,
-             colors=cols,
+             colors=1:8,
              adjustBatch=TRUE,
-             orderby='var')
+             orderby='var',
+             title='Feature 3')
+
+# compare with feature1
+batchBoxplot(idvar='subid', 
+             batchvar='batch', 
+             feature='feature1', 
+             formula='age + diagnosis*time',
+             ranef='(1|subid)',
+             data=simdata,
+             colors=1:8,
+             adjustBatch=TRUE,
+             orderby='var',
+             title='Feature 1')
 
 #################################
 # longCombat() -- apply longitudinal ComBat
@@ -208,47 +283,33 @@ addTestTableCombat <- addTest(idvar='subid',
                               data=simdata)
 
 # there are still some significant additive batch effects (p<0.05)
-# but greatly reduced
+# but p-values tend to be larger (-log10(p-values are smaller)) in overall distribution
+boxplot(-log(as.numeric(addTestTable$`KR p-value`), base=10),
+        -log(as.numeric(addTestTableCombat$`KR p-value`), base=10),
+        ylim=c(0, 8),
+        las=1,
+        ylab='additive batch effect -log10(p-value)',
+        names=c('before ComBat', 'after ComBat'))
 
-# check feature 6 boxplot before combat
+# check feature 5 boxplot before combat
 batchBoxplot(idvar='subid', 
              batchvar='batch', 
-             feature='feature6', 
+             feature='feature5', 
              formula='age + diagnosis*time',
              ranef='(1|subid)',
              data=simdata,
-             colors=cols,
-             title='feature 6 before combat')
+             colors=1:8,
+             title='feature 5 before combat')
 
-# check feature 6 boxplot after combat
+# check feature 5 boxplot after combat
 batchBoxplot(idvar='subid', 
              batchvar='batch', 
-             feature='feature6.combat', 
+             feature='feature5.combat', 
              formula='age + diagnosis*time',
              ranef='(1|subid)',
              data=simdata,
-             colors=cols,
-             title='feature6 after combat')
-
-# check feature 19 boxplot before combat
-batchBoxplot(idvar='subid', 
-             batchvar='batch', 
-             feature='feature19', 
-             formula='age + diagnosis*time',
-             ranef='(1|subid)',
-             data=simdata,
-             colors=cols,
-             title='feature 19 before combat')
-
-# check feature 19 boxplot after combat
-batchBoxplot(idvar='subid', 
-             batchvar='batch', 
-             feature='feature19.combat', 
-             formula='age + diagnosis*time',
-             ranef='(1|subid)',
-             data=simdata,
-             colors=cols,
-             title='feature19 after combat')
+             colors=1:8,
+             title='feature 5 after combat')
 
 #################################
 # test for multiplicative scanner effects in combatted data
@@ -260,51 +321,37 @@ multTestTableCombat <- multTest(idvar='subid',
                                 ranef='(1|subid)',
                                 data=simdata)
 
-# there is still one significant multiplicative batch effect (p<0.05)
+# there are still some significant multiplicative batch effects (p<0.05)
+# but p-values tend to be larger (-log10(p-values are smaller)) in overall distribution
+boxplot(-log(as.numeric(multTestTable$`p-value`), base=10),
+        -log(as.numeric(multTestTableCombat$`p-value`), base=10),
+        las=1,
+        ylab='multiplicative batch effect -log10(p-value)',
+        names=c('before ComBat', 'after ComBat'))
 
-# check feature8 boxplot before combat
+# check feature3 boxplot before combat
 batchBoxplot(idvar='subid', 
              batchvar='batch', 
-             feature='feature8', 
+             feature='feature3', 
              formula='age + diagnosis*time',
              ranef='(1|subid)',
              data=simdata,
-             colors=cols,
+             colors=1:8,
              adjustBatch=TRUE,
-             orderby='var')
+             orderby='var',
+             title='Feature 3 before ComBat')
 
-# check feature8 boxplot after combat
+# check feature3 boxplot after combat
 batchBoxplot(idvar='subid', 
              batchvar='batch', 
-             feature='feature8.combat', 
+             feature='feature3.combat', 
              formula='age + diagnosis*time',
              ranef='(1|subid)',
              data=simdata,
-             colors=cols,
+             colors=1:8,
              adjustBatch=TRUE,
-             orderby='var')
-
-# check feature2 boxplot before combat
-batchBoxplot(idvar='subid', 
-             batchvar='batch', 
-             feature='feature2', 
-             formula='age + diagnosis*time',
-             ranef='(1|subid)',
-             data=simdata,
-             colors=cols,
-             adjustBatch=TRUE,
-             orderby='var')
-
-# check feature2 boxplot after combat
-batchBoxplot(idvar='subid', 
-             batchvar='batch', 
-             feature='feature2.combat', 
-             formula='age + diagnosis*time',
-             ranef='(1|subid)',
-             data=simdata,
-             colors=cols,
-             adjustBatch=TRUE,
-             orderby='var')
+             orderby='var',
+             title='Feature 3 after ComBat')
 
 #################################
 # plot trajectories before and after combat
@@ -315,13 +362,17 @@ trajPlot(idvar='subid',
          feature='feature2', 
          batchvar='batch',  
          data=simdata,
-         ylimits=c(0,20),
-         title='feature 2 before combat')
+         ylimits=c(-30, 12),
+         title='feature 2 before combat',
+         point.col=simdata$batch,
+         line.col=simdata$diagnosis[!duplicated(simdata$subid)]+1)
 
 trajPlot(idvar='subid', 
          timevar='time',
          feature='feature2.combat', 
          batchvar='batch',  
          data=simdata,
-         ylimits=c(0,20),
-         title='feature 2 after combat')
+         ylimits=c(-30,12),
+         title='feature 2 after combat',
+         point.col=simdata$batch,
+         line.col=simdata$diagnosis[!duplicated(simdata$subid)]+1)
