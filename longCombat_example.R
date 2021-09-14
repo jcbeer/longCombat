@@ -18,10 +18,11 @@ library(longCombat)
 ?longCombat
 
 #################################
-# install and load invgamma package
+# install and load invgamma & lmer package
 #################################
 # install.packages('invgamma')
 library(invgamma)
+library(lme4)
 
 #################################
 # simulate data to run the functions
@@ -373,3 +374,19 @@ trajPlot(idvar='subid',
          title='feature 2 after combat',
          point.col=simdata$batch,
          line.col=simdata$diagnosis[!duplicated(simdata$subid)]+1)
+
+#################################
+# fit LME models before / after ComBat
+#################################
+# before ComBat
+feature5.fit <- lmer(feature5 ~ age + diagnosis*time + (1|subid), data=simdata)
+feature5.batch.fit <- lmer(feature5 ~ age + diagnosis*time + batch + (1|subid), data=simdata)
+# after ComBat
+feature5combat.fit <- lmer(feature5.combat ~ age + diagnosis*time + (1|subid), data=simdata)
+feature5combat.batch.fit <- lmer(feature5.combat ~ age + diagnosis*time + batch + (1|subid), data=simdata)
+
+summary(feature5.fit)
+summary(feature5.batch.fit)
+
+summary(feature5combat.fit)
+summary(feature5combat.batch.fit)
