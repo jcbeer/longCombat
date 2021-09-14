@@ -380,10 +380,10 @@ trajPlot(idvar='subid',
 #################################
 # before ComBat
 feature5.fit <- lmer(feature5 ~ age + diagnosis*time + (1|subid), data=simdata)
-feature5.batch.fit <- lmer(feature5 ~ age + diagnosis*time + batch + (1|subid), data=simdata)
+feature5.batch.fit <- lmer(feature5 ~ age + diagnosis*time + as.factor(batch) + (1|subid), data=simdata)
 # after ComBat
 feature5combat.fit <- lmer(feature5.combat ~ age + diagnosis*time + (1|subid), data=simdata)
-feature5combat.batch.fit <- lmer(feature5.combat ~ age + diagnosis*time + batch + (1|subid), data=simdata)
+feature5combat.batch.fit <- lmer(feature5.combat ~ age + diagnosis*time + as.factor(batch) + (1|subid), data=simdata)
 
 summary(feature5.fit)
 summary(feature5.batch.fit)
