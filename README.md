@@ -14,4 +14,4 @@ devtools::install_github("jcbeer/longCombat")
 
 Note: longCombat currently will not run if tidyverse suite is loaded. This may be fixed in the future. For now, please run longCombat before loading tidyverse.
 
-[Contact Joanne Beer](mailto:joanne.beer@pennmedicine.upenn.edu?subject=[GitHub]%20longCombat) with any questions, comments, or suggestions. Feedback is appreciated. 
+[Contact Joanne Beer](mailto:joannecbeer@gmail.com?subject=[GitHub]%20longCombat) with any questions, comments, or suggestions. Feedback is appreciated. 
