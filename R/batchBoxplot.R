@@ -13,7 +13,7 @@
 #' @param colors vector of colors the same length and order as \code{levels(as.factor(data[,batchvar]))} that determines the colors of the boxplots (character string of color names or hexadecimal codes). Default is \code{"grey"} for all.
 #' @param xlabel x-axis label (character string). Default is \code{'batch'}.
 #' @param ylabel y-axis label (character string). Default is \code{'residuals'}.
-#' #' @param ylim y-axis limits.
+#' @param ylim y-axis limits.
 #' @param title main title for the plot, default is no title (character string).
 #' @param verbose prints messages. Logical \code{TRUE} or \code{FALSE}. Default is \code{TRUE}.
 #' @param ... other graphical parameter arguments passed to \code{\link[graphics]{par}}.
