@@ -13,6 +13,7 @@
 #' @param colors vector of colors the same length and order as \code{levels(as.factor(data[,batchvar]))} that determines the colors of the boxplots (character string of color names or hexadecimal codes). Default is \code{"grey"} for all.
 #' @param xlabel x-axis label (character string). Default is \code{'batch'}.
 #' @param ylabel y-axis label (character string). Default is \code{'residuals'}.
+#' #' @param ylim y-axis limits.
 #' @param title main title for the plot, default is no title (character string).
 #' @param verbose prints messages. Logical \code{TRUE} or \code{FALSE}. Default is \code{TRUE}.
 #' @param ... other graphical parameter arguments passed to \code{\link[graphics]{par}}.
@@ -25,7 +26,9 @@ batchBoxplot <- function(idvar, batchvar, feature,
                          adjustBatch=FALSE, orderby='mean', 
                          plotMeans=TRUE, colors='grey',
                          xlabel='batch', ylabel='residuals',
-                         title='', verbose=TRUE, ...){
+                         ylim=NULL,
+                         title='', 
+                         verbose=TRUE, ...){
   
   # make batch a factor if not already
   data[,batchvar] <- droplevels(as.factor(data[,batchvar]))
@@ -70,7 +73,8 @@ batchBoxplot <- function(idvar, batchvar, feature,
   # make plot
   ##############################
   par(mar=c(3, 5, 3, 1), ...)
-  boxplot(fit_residuals$residuals ~ batchorder, main=title, ylab='', xlab='', lty=1, col=colors, las=1, xaxt='n')
+  boxplot(fit_residuals$residuals ~ batchorder, main=title, ylab='', xlab='', 
+          ylim=ylim, lty=1, col=colors, las=1, xaxt='n')
   if (plotMeans==TRUE){
     points(fit_residuals_means[,2][order(fit_residuals_means[,2])], pch=5, col='red', cex=0.6)
   }
