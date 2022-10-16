@@ -6,7 +6,6 @@
 #' @param batchvar character string that specifies name of the batch variable. Batch variable should be a factor.
 #' @param features character string that specifies names of the numeric feature variables, or the numeric indices of the corresponding columns.
 #' #@param covars string vector with fixed effects to include in ComBat model corresponding to columns in data. Should include  covariates, time, and any interactions. Should NOT include batchvar and should NOT include random effects.
-#' @param ranefvar character string that specifies name of the random intercept variable.
 #' @param data name of the data frame that contains the variables above. Rows are different observations (subject/timepoints), columns are different variables.
 #' @param niter number of iterations for empirical Bayes step. Usually converges quickly in less than 30 iterations. Default is 30.
 #' @param method method for estimating sigma in standardization step (character string). \code{'REML'} (default, more conservative type I error control) or \code{'MSR'} (more powerful, less conservative type I error control).
@@ -23,8 +22,7 @@
 #' @export
 
 longCombat <- function(idvar, timevar, batchvar, features, 
-                       covars, ranefvar, data, niter=30, method='REML', verbose=TRUE){
-  print('test version')
+                       covars, data, niter=30, method='REML', verbose=TRUE){
   # check for missing data 
   if (sum(is.na(data)) > 0) {
     missing <- paste(names(data)[apply(data, 2, function(x) sum(is.na(x)) > 0)], collapse=', ')
@@ -33,7 +31,7 @@ longCombat <- function(idvar, timevar, batchvar, features,
   }
   
   formula <- paste(covars,collapse=' + ') #make covariate part of formula
-  ranef <- paste0('(1|',ranefvar,')')
+  ranef <- paste0('(1|',idvar,')')
   
   # make batch a factor if not already
   batch <- droplevels(as.factor(data[[batchvar]]))
@@ -51,7 +49,7 @@ longCombat <- function(idvar, timevar, batchvar, features,
   # number of observations for each batch
   ni <- sapply(batches, length)
   
-  subject <- droplevels(as.factor(data[,ranefvar]))
+  subject <- droplevels(as.factor(data[,idvar]))
   subjects <- lapply(levels(subject), function(x) which(subject==x))
   n_subjs <- nlevels(subject)
   ns <- sapply(batches, length) 
