@@ -5,8 +5,8 @@
 #' @param timevar character string that specifies name of numeric variable that distinguishes within-subject repeated measures, e.g., time, age, or visit.
 #' @param batchvar character string that specifies name of the batch variable. Batch variable should be a factor.
 #' @param features character string that specifies names of the numeric feature variables, or the numeric indices of the corresponding columns.
-#' @param formula character string representing all fixed effects on the right side of the formula for the linear mixed effects model. This should be in the notation used by \code{lme4} and include covariates, time, and any interactions. For example, \code{"age + sex + diagnosis*time"} fits model with fixed effects age, sex, diagnosis, time, and the diagnosis*time interaction. Formula should NOT include batchvar and should NOT include random effects.
-#' @param ranef character string representing formula for the random effects in the notation used by \code{lme4}. For example, \code{"(1|subid)"} fits a random intercept for each unique idvar \code{subid}, and \code{"(1 + time|subid)"} fits a random intercept and random slope for each unique \code{subid}.
+#' #@param covars string vector with fixed effects to include in ComBat model corresponding to columns in data. Should include  covariates, time, and any interactions. Should NOT include batchvar and should NOT include random effects.
+#' @param ranefvar character string that specifies name of the random intercept variable.
 #' @param data name of the data frame that contains the variables above. Rows are different observations (subject/timepoints), columns are different variables.
 #' @param niter number of iterations for empirical Bayes step. Usually converges quickly in less than 30 iterations. Default is 30.
 #' @param method method for estimating sigma in standardization step (character string). \code{'REML'} (default, more conservative type I error control) or \code{'MSR'} (more powerful, less conservative type I error control).
@@ -23,14 +23,18 @@
 #' @export
 
 longCombat <- function(idvar, timevar, batchvar, features, 
-                       formula, ranef, data, niter=30, method='REML', verbose=TRUE){
-
+                       covars, ranefvar, data, niter=30, method='REML', verbose=TRUE){
+  print('test version')
   # check for missing data 
   if (sum(is.na(data)) > 0) {
     missing <- paste(names(data)[apply(data, 2, function(x) sum(is.na(x)) > 0)], collapse=', ')
     message <- paste0('Missing data in variables:\n\n', missing, '\n\nBefore running longCombat either impute the missing values, remove those rows, or remove columns with missing values if that variable is not in the model.')
     stop(message)
   }
+  
+  formula <- paste(covars,collapse=' + ') #make covariate part of formula
+  ranef <- paste0('(1|',ranefvar,')')
+  
   # make batch a factor if not already
   batch <- droplevels(as.factor(data[[batchvar]]))
   # check for batches with only one observation
@@ -46,6 +50,14 @@ longCombat <- function(idvar, timevar, batchvar, features,
   batches <- lapply(levels(batch), function(x) which(batch==x))
   # number of observations for each batch
   ni <- sapply(batches, length)
+  
+  subject <- droplevels(as.factor(data[,ranefvar]))
+  subjects <- lapply(levels(subject), function(x) which(subject==x))
+  n_subjs <- nlevels(subject)
+  ns <- sapply(batches, length) 
+  
+
+  
   # feature names
   if (is.numeric(features[1])) {
     featurenames <- names(data)[features]
@@ -67,6 +79,9 @@ longCombat <- function(idvar, timevar, batchvar, features,
   sigma_estimates <- rep(NA, V)
   predicted <- matrix(nrow=L, ncol=V)
   batch_effects <- matrix(nrow=(m-1), ncol=V)
+  intercepts <- matrix(nrow=1, ncol=V)
+  covariate_effects <- matrix(nrow=length(covars),ncol=V)
+  subj_effects <- matrix(nrow=n_subjs,ncol=V)
   for (v in 1:V){ # begin loop over features
     if (verbose) cat(paste0('[longCombat] fitting lme model for feature ', v, '\n'))
     # make the linear mixed effects model lmer formula
@@ -83,6 +98,12 @@ longCombat <- function(idvar, timevar, batchvar, features,
     }
     # save batch effects
     batch_effects[,v] <- lme4::fixef(lme_fit)[grep(batchvar, names(lme4::fixef(lme_fit)))]
+    #save intercepts
+    intercepts[,v] <- lme4::fixef(lme_fit)[grep("(Intercept)", names(lme4::fixef(lme_fit)))]
+    #save covariate effects
+    covariate_effects[,v] <- lme4::fixef(lme_fit)[covars]
+    #save subject intercepts
+    subj_effects[,v]<-unlist(lme4::ranef(lme_fit))
     # save predicted values
     predicted[,v] <- fitted(lme_fit)
   } # end loop over features
@@ -104,6 +125,19 @@ longCombat <- function(idvar, timevar, batchvar, features,
       rep(batch_effects_adjusted[i,],length(batches[[i]])),
       ncol=V, byrow=TRUE) 
   } # end loop over batches
+  
+  subject_effects_expanded <- matrix(nrow=L,ncol=V)
+  for(i in 1:n_subjs){ # begin loop over subjects
+    subject_effects_expanded[subjects[[i]],] <- matrix(
+      rep(subj_effects[i,],length(subjects[[i]])),
+      ncol=V, byrow=TRUE) 
+  } # end loop over subjects
+  data_features_mat<-as.matrix(data[features]) #y_ijv
+  data_covars_mat<-as.matrix(data[covars]) #X
+  intercepts_expanded <- do.call(rbind, replicate(dim(data)[1], intercepts, simplify=FALSE)) #expand intercepts to all rows
+  
+  predicted <- intercepts_expanded + data_covars_mat %*% covariate_effects + subject_effects_expanded + batch_effects_expanded
+
   # standardize the data
   data_std <- (data[,featurenames] - predicted + batch_effects_expanded) / sigmas
   
